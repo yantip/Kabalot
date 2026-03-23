@@ -5,7 +5,11 @@ import { normalizeExtractionResult } from "./normalize";
 import { EXTRACTION_SYSTEM_PROMPT, EXTRACTION_USER_PROMPT } from "./prompt";
 import { createHash } from "crypto";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+let _openai: OpenAI | null = null;
+function getOpenAI() {
+  if (!_openai) _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  return _openai;
+}
 
 interface ProcessResult {
   success: boolean;
@@ -21,7 +25,7 @@ export async function processReceipt(
   const startTime = Date.now();
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI().chat.completions.create({
       model: "gpt-4o",
       messages: [
         { role: "system", content: EXTRACTION_SYSTEM_PROMPT },
