@@ -2,8 +2,10 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getUserSubscription, getMonthlyUsage } from "@/actions/billing";
+import { getCategories } from "@/actions/categories";
 import { PLANS } from "@/lib/plans";
 import { ConnectTelegram } from "@/components/telegram/connect-telegram";
+import { ManageCategories } from "@/components/settings/manage-categories";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button-variants";
 import {
@@ -23,10 +25,11 @@ export default async function SettingsPage() {
 
   if (!user) redirect("/login");
 
-  const [{ data: profile }, subscription, usage] = await Promise.all([
+  const [{ data: profile }, subscription, usage, categories] = await Promise.all([
     supabase.from("profiles").select("*").eq("id", user.id).single(),
     getUserSubscription(),
     getMonthlyUsage(),
+    getCategories(),
   ]);
 
   const isConnected = !!profile?.telegram_chat_id;
@@ -124,6 +127,8 @@ export default async function SettingsPage() {
           </Link>
         </CardContent>
       </Card>
+
+      <ManageCategories categories={categories} />
 
       <ConnectTelegram isConnected={isConnected} />
     </div>

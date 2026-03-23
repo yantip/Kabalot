@@ -72,7 +72,6 @@ export default async function DashboardPage() {
       accentBg: "bg-gradient-to-br from-warm-amber/15 to-warm-amber/5",
       iconColor: "text-warm-amber",
       borderColor: "border-r-warm-amber",
-      hero: true,
     },
     {
       label: "פרויקטים",
@@ -130,28 +129,20 @@ export default async function DashboardPage() {
             className={cn(
               "animate-slide-up border-0 shadow-sm shadow-foreground/[0.03] card-glow overflow-hidden border-r-[3px]",
               stat.borderColor,
-              stat.hero && "col-span-2 lg:col-span-2",
               `stagger-${i + 1}`
             )}
           >
-            <CardContent className={cn("pt-5", stat.hero && "pt-6 pb-6")}>
+            <CardContent className="pt-5">
               <div className="flex items-center justify-between mb-3">
-                <span className={cn(
-                  "font-medium text-muted-foreground",
-                  stat.hero ? "text-base" : "text-sm"
-                )}>{stat.label}</span>
+                <span className="text-sm font-medium text-muted-foreground">{stat.label}</span>
                 <div className={cn(
-                  "flex items-center justify-center rounded-xl",
+                  "flex h-9 w-9 items-center justify-center rounded-xl",
                   stat.accentBg,
-                  stat.hero ? "h-11 w-11" : "h-9 w-9"
                 )}>
-                  <stat.icon className={cn(stat.iconColor, stat.hero ? "h-5.5 w-5.5" : "h-4 w-4")} />
+                  <stat.icon className={cn(stat.iconColor, "h-4 w-4")} />
                 </div>
               </div>
-              <div className={cn(
-                "font-bold tabular-nums tracking-tight",
-                stat.hero ? "text-5xl" : "text-3xl"
-              )}>{stat.value}</div>
+              <div className="text-3xl font-bold tabular-nums tracking-tight">{stat.value}</div>
             </CardContent>
           </Card>
         ))}

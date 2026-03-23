@@ -152,6 +152,12 @@ export async function deleteProject(projectId: string) {
 
   if (!user) return { error: "לא מחובר" };
 
+  const { data: receipts } = await supabase
+    .from("receipts")
+    .select("image_url")
+    .eq("project_id", projectId)
+    .eq("user_id", user.id);
+
   const { error } = await supabase
     .from("projects")
     .delete()
@@ -160,6 +166,22 @@ export async function deleteProject(projectId: string) {
 
   if (error) return { error: "שגיאה במחיקת הפרויקט" };
 
+  if (receipts && receipts.length > 0) {
+    const paths = receipts
+      .map((r) => extractStoragePath(r.image_url))
+      .filter((p): p is string => p !== null);
+    if (paths.length > 0) {
+      await supabase.storage.from("receipts").remove(paths);
+    }
+  }
+
   revalidatePath("/projects");
   redirect("/projects");
+}
+
+function extractStoragePath(imageUrl: string): string | null {
+  const marker = "/storage/v1/object/public/receipts/";
+  const idx = imageUrl.indexOf(marker);
+  if (idx === -1) return null;
+  return imageUrl.slice(idx + marker.length);
 }

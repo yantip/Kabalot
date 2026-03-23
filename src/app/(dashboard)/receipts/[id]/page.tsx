@@ -31,6 +31,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/receipts/status-badge";
 import { CATEGORIES, CURRENCIES } from "@/lib/constants";
+import { getCategories } from "@/actions/categories";
 import type { Receipt } from "@/lib/supabase/types";
 import type { ReceiptStatus } from "@/lib/constants";
 import { toast } from "sonner";
@@ -59,10 +60,19 @@ export default function ReceiptDetailPage() {
   const [receiptNumber, setReceiptNumber] = useState("");
   const [category, setCategory] = useState("");
   const [notes, setNotes] = useState("");
+  const [categoryOptions, setCategoryOptions] = useState<string[]>([...CATEGORIES]);
 
   useEffect(() => {
     async function load() {
-      const supabase = createClient();
+      const [supabase, userCategories] = await Promise.all([
+        Promise.resolve(createClient()),
+        getCategories(),
+      ]);
+
+      if (userCategories.length > 0) {
+        setCategoryOptions(userCategories.map((c) => c.name));
+      }
+
       const { data } = await supabase
         .from("receipts")
         .select("*")
@@ -304,7 +314,7 @@ export default function ReceiptDetailPage() {
                     <SelectValue placeholder="בחר קטגוריה" />
                   </SelectTrigger>
                   <SelectContent>
-                    {CATEGORIES.map((c) => (
+                    {categoryOptions.map((c) => (
                       <SelectItem key={c} value={c}>
                         {c}
                       </SelectItem>

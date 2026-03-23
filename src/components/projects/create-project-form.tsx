@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FieldSelector } from "@/components/projects/field-selector";
 import { RECEIPT_FIELDS, type ReceiptFieldKey } from "@/lib/constants";
+import { Loader2 } from "lucide-react";
 
 export function CreateProjectForm() {
   const [error, setError] = useState<string | null>(null);
@@ -62,8 +63,9 @@ export function CreateProjectForm() {
         <span className="text-sm">הגדר כפרויקט ברירת מחדל</span>
       </label>
 
-      <Button type="submit" disabled={loading || enabledFields.length === 0}>
-        {loading ? "יוצר..." : "צור פרויקט"}
+      <Button type="submit" disabled={loading || enabledFields.length === 0} className="gap-2 rounded-xl btn-gradient shadow-lg shadow-primary/15">
+        {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+        {loading ? "יוצר פרויקט..." : "צור פרויקט"}
       </Button>
     </form>
   );

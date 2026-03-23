@@ -98,7 +98,7 @@ export async function deleteReceipt(receiptId: string) {
 
   const { data: receipt } = await supabase
     .from("receipts")
-    .select("project_id")
+    .select("project_id, image_url")
     .eq("id", receiptId)
     .eq("user_id", user.id)
     .single();
@@ -111,9 +111,30 @@ export async function deleteReceipt(receiptId: string) {
 
   if (error) return { error: "שגיאה במחיקת הקבלה" };
 
+  if (receipt?.image_url) {
+    await deleteStorageImage(supabase, receipt.image_url);
+  }
+
   if (receipt) {
     revalidatePath(`/projects/${receipt.project_id}`);
   }
 
   return { success: true, projectId: receipt?.project_id };
+}
+
+function extractStoragePath(imageUrl: string): string | null {
+  const marker = "/storage/v1/object/public/receipts/";
+  const idx = imageUrl.indexOf(marker);
+  if (idx === -1) return null;
+  return imageUrl.slice(idx + marker.length);
+}
+
+async function deleteStorageImage(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  imageUrl: string,
+) {
+  const path = extractStoragePath(imageUrl);
+  if (path) {
+    await supabase.storage.from("receipts").remove([path]);
+  }
 }

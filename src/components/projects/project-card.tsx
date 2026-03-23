@@ -66,7 +66,7 @@ export function ProjectCard({
                 )}
               </div>
               {description && (
-                <CardDescription className="mt-2 line-clamp-2">
+                <CardDescription className="mt-2 truncate">
                   {description}
                 </CardDescription>
               )}
