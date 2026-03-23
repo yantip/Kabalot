@@ -59,13 +59,13 @@ export async function addCategory(name: string) {
 
   const { data: existing } = await supabase
     .from("user_categories")
-    .select("id")
+    .select("id, display_order")
     .eq("user_id", user.id)
     .order("display_order", { ascending: false })
     .limit(1);
 
   const nextOrder = existing && existing.length > 0
-    ? (existing[0] as { id: string }).display_order ?? 0 + 1
+    ? (existing[0] as { id: string; display_order: number }).display_order + 1
     : 0;
 
   const { error } = await supabase.from("user_categories").insert({

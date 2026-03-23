@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Check, Sparkles, Zap, ArrowLeft } from "lucide-react";
+import { Check, Sparkles, Zap, ArrowLeft, Star } from "lucide-react";
 
 export default async function BillingPage() {
   const supabase = await createClient();
@@ -139,7 +139,9 @@ export default async function BillingPage() {
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-bold tracking-tight">₪30</span>
+              <span className="text-4xl font-bold tracking-tight flex items-center gap-1.5">
+                {PLANS.pro.starPrice} <Star className="h-7 w-7 text-warm-amber fill-warm-amber" />
+              </span>
               <span className="text-sm text-muted-foreground">/ חודש</span>
             </div>
             <ul className="space-y-3">

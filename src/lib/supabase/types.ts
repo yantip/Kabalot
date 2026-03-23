@@ -84,6 +84,17 @@ export type Subscription = {
   updated_at: string;
 };
 
+export type StarPayment = {
+  id: string;
+  user_id: string;
+  telegram_payment_charge_id: string;
+  telegram_user_id: number;
+  amount_stars: number;
+  payload: Record<string, unknown>;
+  refunded: boolean;
+  created_at: string;
+};
+
 export type ProjectWithReceiptCount = Project & {
   receipt_count: number;
 };

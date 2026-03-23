@@ -1,9 +1,10 @@
-"use client";
-
+import { redirect } from "next/navigation";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { getUserSubscription } from "@/actions/billing";
+import { PLANS } from "@/lib/plans";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button-variants";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,20 +12,35 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import {
   ArrowRight,
-  CreditCard,
-  Lock,
   Sparkles,
   Check,
+  MessageCircle,
+  Star,
 } from "lucide-react";
-import { PLANS } from "@/lib/plans";
 
-export default function CheckoutPage() {
+export default async function CheckoutPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/login");
+
+  const subscription = await getUserSubscription();
+  if (subscription.plan_id === "pro") redirect("/billing/manage");
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("telegram_chat_id")
+    .eq("id", user.id)
+    .single();
+
+  const isConnected = !!profile?.telegram_chat_id;
   const plan = PLANS.pro;
+  const botUsername = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || "your_bot";
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 animate-slide-up">
@@ -41,7 +57,7 @@ export default function CheckoutPage() {
         <div className="space-y-0.5">
           <h1 className="text-3xl font-bold tracking-tight">שדרוג לתוכנית מקצועית</h1>
           <p className="text-sm text-muted-foreground">
-            השלם את התשלום כדי להתחיל
+            תשלום באמצעות Telegram Stars
           </p>
         </div>
       </div>
@@ -67,7 +83,9 @@ export default function CheckoutPage() {
             <Separator />
             <div className="flex items-baseline justify-between">
               <span className="text-sm font-semibold">סה&quot;כ לחודש</span>
-              <span className="text-2xl font-bold">₪{plan.price}</span>
+              <span className="text-2xl font-bold flex items-center gap-1">
+                {plan.starPrice} <Star className="h-5 w-5 text-warm-amber fill-warm-amber" />
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -75,69 +93,58 @@ export default function CheckoutPage() {
         <Card className="sm:col-span-3 border-0 shadow-sm shadow-foreground/[0.03] rounded-2xl">
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2 font-bold">
-              <CreditCard className="h-4 w-4 text-muted-foreground" />
-              פרטי תשלום
+              <MessageCircle className="h-4 w-4 text-muted-foreground" />
+              תשלום דרך טלגרם
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="card-name">שם בעל הכרטיס</Label>
-              <Input
-                id="card-name"
-                placeholder="ישראל ישראלי"
-                disabled
-                className="bg-muted/50 rounded-xl"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="card-number">מספר כרטיס</Label>
-              <Input
-                id="card-number"
-                placeholder="0000 0000 0000 0000"
-                disabled
-                className="bg-muted/50 tabular-nums rounded-xl"
-                dir="ltr"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
-                <Label htmlFor="card-expiry">תוקף</Label>
-                <Input
-                  id="card-expiry"
-                  placeholder="MM / YY"
-                  disabled
-                  className="bg-muted/50 tabular-nums rounded-xl"
-                  dir="ltr"
-                />
+          <CardContent className="space-y-5">
+            <div className="rounded-xl bg-[hsl(200,80%,96%)] ring-1 ring-[hsl(200,60%,80%)]/30 p-5 space-y-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[hsl(200,60%,50%)]/15 mx-auto">
+                <Star className="h-6 w-6 text-[hsl(200,60%,50%)]" />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="card-cvc">CVV</Label>
-                <Input
-                  id="card-cvc"
-                  placeholder="•••"
-                  disabled
-                  className="bg-muted/50 tabular-nums rounded-xl"
-                  dir="ltr"
-                />
-              </div>
-            </div>
-
-            <div className="rounded-xl bg-warm-amber/[0.06] ring-1 ring-warm-amber/15 p-5 text-center space-y-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-warm-amber/15 mx-auto">
-                <Lock className="h-4.5 w-4.5 text-warm-amber" />
-              </div>
-              <p className="text-sm font-semibold text-foreground">
-                חיבור לשירות תשלום בקרוב
+              <p className="text-sm font-semibold text-center">
+                התשלום מתבצע באמצעות Telegram Stars
               </p>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                אזור זה ישולב עם ספק תשלום מאובטח. כרגע מדובר בתצוגה מקדימה בלבד.
+              <p className="text-xs text-muted-foreground text-center leading-relaxed">
+                שלח את הפקודה <code className="bg-muted/80 px-1.5 py-0.5 rounded-md font-mono">/upgrade</code> לבוט הטלגרם שלנו
+                כדי לקבל חשבונית תשלום ישירות בטלגרם
               </p>
             </div>
 
-            <Button className="w-full rounded-xl" disabled>
-              <Lock className="h-3.5 w-3.5 me-1" />
-              שלם ₪{plan.price} לחודש
-            </Button>
+            {isConnected ? (
+              <a
+                href={`https://t.me/${botUsername}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants(),
+                  "w-full rounded-xl btn-gradient shadow-lg shadow-primary/20"
+                )}
+              >
+                <MessageCircle className="h-4 w-4 me-2" />
+                פתח את הבוט ושלח /upgrade
+              </a>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-sm text-muted-foreground text-center">
+                  כדי לשלם, חבר קודם את חשבון הטלגרם שלך
+                </p>
+                <Link
+                  href="/settings"
+                  className={cn(
+                    buttonVariants({ variant: "outline" }),
+                    "w-full rounded-xl"
+                  )}
+                >
+                  חבר טלגרם בהגדרות
+                  <ArrowRight className="h-3.5 w-3.5 ms-2" />
+                </Link>
+              </div>
+            )}
+
+            <p className="text-xs text-muted-foreground text-center">
+              Telegram Stars הוא אמצעי תשלום דיגיטלי מאובטח של טלגרם
+            </p>
           </CardContent>
         </Card>
       </div>

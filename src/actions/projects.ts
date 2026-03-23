@@ -8,6 +8,7 @@ import {
   updateProjectSchema,
 } from "@/lib/validators/schemas";
 import { RECEIPT_FIELDS, RECEIPT_FIELD_KEYS } from "@/lib/constants";
+import { checkProjectLimit } from "@/lib/usage";
 
 export async function createProject(formData: FormData) {
   const supabase = await createClient();
@@ -16,6 +17,13 @@ export async function createProject(formData: FormData) {
   } = await supabase.auth.getUser();
 
   if (!user) return { error: "לא מחובר" };
+
+  const projectCheck = await checkProjectLimit(user.id);
+  if (!projectCheck.allowed) {
+    return {
+      error: `הגעת למגבלת הפרויקטים (${projectCheck.count}/${projectCheck.limit}). שדרג לתוכנית מקצועית כדי ליצור פרויקטים נוספים.`,
+    };
+  }
 
   const enabledFields = formData.getAll("enabledFields") as string[];
 

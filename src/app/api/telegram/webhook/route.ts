@@ -11,7 +11,12 @@ export async function POST(request: NextRequest) {
 
   try {
     const update = await request.json();
-    console.log("Telegram webhook received:", update.message?.text ?? (update.message?.photo ? "[photo]" : "[other]"));
+    const logType = update.pre_checkout_query
+      ? "[pre_checkout_query]"
+      : update.message?.successful_payment
+        ? "[successful_payment]"
+        : update.message?.text ?? (update.message?.photo ? "[photo]" : "[other]");
+    console.log("Telegram webhook received:", logType);
     await handleTelegramUpdate(update);
     return NextResponse.json({ ok: true });
   } catch (error) {
