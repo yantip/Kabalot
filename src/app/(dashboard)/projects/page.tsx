@@ -92,7 +92,6 @@ export default async function ProjectsPage() {
                 id={project.id}
                 name={project.name}
                 description={project.description}
-                isDefault={project.is_default}
                 receiptCount={project.receipt_count}
               />
             </div>

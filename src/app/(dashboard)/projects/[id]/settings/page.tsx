@@ -10,7 +10,6 @@ import { buttonVariants } from "@/components/ui/button-variants";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import { FieldSelector } from "@/components/projects/field-selector";
 import {
   Card,
@@ -31,7 +30,6 @@ export default function ProjectSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [isDefault, setIsDefault] = useState(false);
   const [enabledFields, setEnabledFields] = useState<ReceiptFieldKey[]>([]);
 
   useEffect(() => {
@@ -46,7 +44,6 @@ export default function ProjectSettingsPage() {
       if (project) {
         setName(project.name);
         setDescription(project.description ?? "");
-        setIsDefault(project.is_default);
       }
 
       const { data: fields } = await supabase
@@ -69,7 +66,6 @@ export default function ProjectSettingsPage() {
     const formData = new FormData();
     formData.set("name", name);
     formData.set("description", description);
-    if (isDefault) formData.set("isDefault", "on");
     enabledFields.forEach((f) => formData.append("enabledFields", f));
 
     const result = await updateProject(id, formData);
@@ -126,13 +122,6 @@ export default function ProjectSettingsPage() {
               className="rounded-xl"
             />
           </div>
-          <label className="flex items-center gap-2">
-            <Checkbox
-              checked={isDefault}
-              onCheckedChange={(checked) => setIsDefault(!!checked)}
-            />
-            <span className="text-sm">פרויקט ברירת מחדל</span>
-          </label>
         </CardContent>
       </Card>
 

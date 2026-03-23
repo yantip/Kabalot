@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { buttonVariants } from "@/components/ui/button-variants";
-import { Badge } from "@/components/ui/badge";
+
 import { cn } from "@/lib/utils";
 import { Settings, FolderOpen } from "lucide-react";
 import { ExportDropdown } from "@/components/projects/export-dropdown";
@@ -55,14 +55,7 @@ export default async function ProjectDetailPage({ params }: Props) {
             <FolderOpen className="h-6 w-6 text-warm-amber" />
           </div>
           <div className="min-w-0 space-y-1.5">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <h1 className="text-3xl font-bold tracking-tight">{project.name}</h1>
-              {project.is_default && (
-                <Badge variant="secondary" className="text-xs shrink-0">
-                  ברירת מחדל
-                </Badge>
-              )}
-            </div>
+            <h1 className="text-3xl font-bold tracking-tight">{project.name}</h1>
             {project.description && (
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {project.description}

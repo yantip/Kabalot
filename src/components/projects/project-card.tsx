@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -25,7 +24,6 @@ interface ProjectCardProps {
   id: string;
   name: string;
   description: string | null;
-  isDefault: boolean;
   receiptCount: number;
 }
 
@@ -33,7 +31,6 @@ export function ProjectCard({
   id,
   name,
   description,
-  isDefault,
   receiptCount,
 }: ProjectCardProps) {
   const router = useRouter();
@@ -59,11 +56,6 @@ export function ProjectCard({
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 pe-8">
                 <CardTitle className="truncate text-base font-bold">{name}</CardTitle>
-                {isDefault && (
-                  <Badge variant="secondary" className="shrink-0 text-xs">
-                    ברירת מחדל
-                  </Badge>
-                )}
               </div>
               {description && (
                 <CardDescription className="mt-2 truncate">

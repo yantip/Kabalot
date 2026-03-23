@@ -142,7 +142,6 @@ async function handlePhotoMessage(
     .from("projects")
     .select("id, name")
     .eq("user_id", profile.id)
-    .order("is_default", { ascending: false })
     .order("created_at");
 
   if (!projects || projects.length === 0) {

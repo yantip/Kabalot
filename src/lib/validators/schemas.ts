@@ -14,14 +14,12 @@ export const signupSchema = z.object({
 export const createProjectSchema = z.object({
   name: z.string().min(1, "שם הפרויקט הוא שדה חובה"),
   description: z.string().optional(),
-  isDefault: z.boolean().optional(),
   enabledFields: z.array(z.string()).min(1, "יש לבחור לפחות שדה אחד"),
 });
 
 export const updateProjectSchema = z.object({
   name: z.string().min(1, "שם הפרויקט הוא שדה חובה").optional(),
   description: z.string().optional(),
-  isDefault: z.boolean().optional(),
   enabledFields: z.array(z.string()).min(1, "יש לבחור לפחות שדה אחד").optional(),
 });
 

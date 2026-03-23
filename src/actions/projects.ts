@@ -22,19 +22,11 @@ export async function createProject(formData: FormData) {
   const parsed = createProjectSchema.safeParse({
     name: formData.get("name"),
     description: formData.get("description") || undefined,
-    isDefault: formData.get("isDefault") === "on",
     enabledFields,
   });
 
   if (!parsed.success) {
     return { error: parsed.error.issues[0].message };
-  }
-
-  if (parsed.data.isDefault) {
-    await supabase
-      .from("projects")
-      .update({ is_default: false })
-      .eq("user_id", user.id);
   }
 
   const { data: project, error } = await supabase
@@ -43,7 +35,6 @@ export async function createProject(formData: FormData) {
       user_id: user.id,
       name: parsed.data.name,
       description: parsed.data.description ?? null,
-      is_default: parsed.data.isDefault ?? false,
     })
     .select()
     .single();
@@ -61,13 +52,6 @@ export async function createProject(formData: FormData) {
 
   await supabase.from("project_field_settings").insert(fieldSettings);
 
-  if (parsed.data.isDefault) {
-    await supabase
-      .from("profiles")
-      .update({ default_project_id: project.id })
-      .eq("id", user.id);
-  }
-
   redirect(`/projects/${project.id}`);
 }
 
@@ -84,7 +68,6 @@ export async function updateProject(projectId: string, formData: FormData) {
   const parsed = updateProjectSchema.safeParse({
     name: formData.get("name") || undefined,
     description: formData.get("description") || undefined,
-    isDefault: formData.get("isDefault") === "on",
     enabledFields: enabledFields.length > 0 ? enabledFields : undefined,
   });
 
@@ -92,19 +75,10 @@ export async function updateProject(projectId: string, formData: FormData) {
     return { error: parsed.error.issues[0].message };
   }
 
-  if (parsed.data.isDefault) {
-    await supabase
-      .from("projects")
-      .update({ is_default: false })
-      .eq("user_id", user.id);
-  }
-
   const updates: Record<string, unknown> = {};
   if (parsed.data.name) updates.name = parsed.data.name;
   if (parsed.data.description !== undefined)
     updates.description = parsed.data.description;
-  if (parsed.data.isDefault !== undefined)
-    updates.is_default = parsed.data.isDefault;
 
   if (Object.keys(updates).length > 0) {
     const { error } = await supabase
@@ -130,13 +104,6 @@ export async function updateProject(projectId: string, formData: FormData) {
     }));
 
     await supabase.from("project_field_settings").insert(fieldSettings);
-  }
-
-  if (parsed.data.isDefault) {
-    await supabase
-      .from("profiles")
-      .update({ default_project_id: projectId })
-      .eq("id", user.id);
   }
 
   revalidatePath(`/projects/${projectId}`);
