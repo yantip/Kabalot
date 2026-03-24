@@ -13,6 +13,11 @@ import {
   Zap,
   ShieldCheck,
 } from "lucide-react";
+import { ScrollReveal } from "@/components/landing/scroll-reveal";
+import {
+  FlowConnectorHorizontal,
+  FlowConnectorVertical,
+} from "@/components/landing/flow-connectors";
 
 export default function LandingPage() {
   return (
@@ -58,126 +63,152 @@ export default function LandingPage() {
         </div>
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-16 sm:pt-24 pb-20 sm:pb-32 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-8">
-            <Zap className="h-3.5 w-3.5" />
-            ניהול קבלות חכם — בלי כאב ראש
-          </div>
+          <ScrollReveal variant="fade-up-soft">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-8">
+              <Zap className="h-3.5 w-3.5" />
+              ניהול קבלות חכם — בלי כאב ראש
+            </div>
+          </ScrollReveal>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] max-w-3xl mx-auto">
-            צלם קבלה.
-            <br />
-            <span className="text-primary">הנתונים מוכנים.</span>
-          </h1>
+          <ScrollReveal variant="fade-up" delay={60}>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] max-w-3xl mx-auto">
+              צלם קבלה.
+              <br />
+              <span className="text-primary">הנתונים מוכנים.</span>
+            </h1>
+          </ScrollReveal>
 
-          <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            שלח תמונה של קבלה בטלגרם — הבינה המלאכותית תחלץ את כל הנתונים אוטומטית.
-            ייצוא לאקסל בקליק אחד. פשוט ככה.
-          </p>
+          <ScrollReveal variant="fade-up" delay={120}>
+            <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              שלח תמונה של קבלה בטלגרם — הבינה המלאכותית תחלץ את כל הנתונים אוטומטית.
+              ייצוא לאקסל בקליק אחד. פשוט ככה.
+            </p>
+          </ScrollReveal>
 
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/?auth=signup"
-              scroll={false}
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-bold text-base rounded-xl px-8 py-3.5 shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30"
-            >
-              התחל בחינם
-              <ArrowLeft className="h-4 w-4" />
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-4 py-3.5"
-            >
-              איך זה עובד?
-            </Link>
-          </div>
+          <ScrollReveal variant="fade-up" delay={180}>
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/?auth=signup"
+                scroll={false}
+                className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-bold text-base rounded-xl px-8 py-3.5 shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30"
+              >
+                התחל בחינם
+                <ArrowLeft className="h-4 w-4" />
+              </Link>
+              <Link
+                href="#how-it-works"
+                className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-4 py-3.5"
+              >
+                איך זה עובד?
+              </Link>
+            </div>
+          </ScrollReveal>
 
-          <p className="mt-4 text-xs text-muted-foreground/60">ללא כרטיס אשראי · 5 קבלות בחודש בחינם</p>
+          <ScrollReveal variant="fade-up" delay={240}>
+            <p className="mt-4 text-xs text-muted-foreground/60">ללא כרטיס אשראי · 5 קבלות בחודש בחינם</p>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ── 3‑Step Flow ── */}
       <section id="how-it-works" className="py-20 sm:py-28 scroll-mt-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="text-center mb-16">
+          <ScrollReveal className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
               שלושה צעדים. זה הכל.
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
               מהקבלה ביד — לגיליון אקסל מסודר. בלי הקלדות, בלי סריקות, בלי בזבוז זמן.
             </p>
-          </div>
+          </ScrollReveal>
 
-          <div className="grid gap-8 sm:gap-6 lg:grid-cols-3">
-            <div className="relative surface surface-hover p-8 text-center group">
-              <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
-                1
-              </div>
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-6 group-hover:scale-105 transition-transform duration-300">
-                <Send className="h-7 w-7 text-primary" />
-              </div>
-              <h3 className="text-lg font-bold mb-2">שלח תמונה בטלגרם</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                צלם את הקבלה עם הטלפון ושלח לבוט הטלגרם שלנו. זה ממש כמו לשלוח הודעה לחבר.
-              </p>
-              <div className="mt-6 rounded-xl bg-muted/50 p-4 border border-border/40">
-                <div className="flex items-center gap-3 text-right">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#2AABEE]/10">
-                    <MessageCircle className="h-4 w-4 text-[#2AABEE]" />
+          <div className="flex flex-col gap-4 lg:gap-0 lg:flex-row lg:items-stretch lg:justify-center max-w-6xl mx-auto">
+            <ScrollReveal delay={0} className="flex-1 min-w-0">
+              <div className="relative surface surface-hover p-8 text-center group h-full">
+                <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
+                  1
+                </div>
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-6 group-hover:scale-105 transition-transform duration-300">
+                  <Send className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="text-lg font-bold mb-2">שלח תמונה בטלגרם</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  צלם את הקבלה עם הטלפון ושלח לבוט הטלגרם שלנו. זה ממש כמו לשלוח הודעה לחבר.
+                </p>
+                <div className="mt-6 rounded-xl bg-muted/50 p-4 border border-border/40">
+                  <div className="flex items-center gap-3 text-right">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#2AABEE]/10">
+                      <MessageCircle className="h-4 w-4 text-[#2AABEE]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium">קבלות Bot</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">קיבלתי את הקבלה! מעבד...</p>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium">קבלות Bot</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">קיבלתי את הקבלה! מעבד...</p>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            <FlowConnectorVertical className="lg:hidden" />
+            <div className="hidden lg:flex items-center justify-center shrink-0 w-10 md:w-14 self-center pt-8">
+              <FlowConnectorHorizontal />
+            </div>
+
+            <ScrollReveal delay={100} className="flex-1 min-w-0">
+              <div className="relative surface surface-hover p-8 text-center group h-full">
+                <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
+                  2
+                </div>
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-6 group-hover:scale-105 transition-transform duration-300">
+                  <Cpu className="h-7 w-7 text-primary" />
+                </div>
+                <h3 className="text-lg font-bold mb-2">AI מחלץ את הנתונים</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  הבינה המלאכותית מזהה את הספק, הסכום, התאריך, המע&quot;מ ושאר הפרטים — אוטומטית.
+                </p>
+                <div className="mt-6 rounded-xl bg-muted/50 p-4 border border-border/40 text-right space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="font-mono tabular-nums text-primary font-semibold">₪156.80</span>
+                    <span className="text-muted-foreground">סכום</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="font-medium">שופרסל דיל</span>
+                    <span className="text-muted-foreground">ספק</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="font-mono tabular-nums">24/03/2026</span>
+                    <span className="text-muted-foreground">תאריך</span>
                   </div>
                 </div>
               </div>
+            </ScrollReveal>
+
+            <FlowConnectorVertical className="lg:hidden" />
+            <div className="hidden lg:flex items-center justify-center shrink-0 w-10 md:w-14 self-center pt-8">
+              <FlowConnectorHorizontal />
             </div>
 
-            <div className="relative surface surface-hover p-8 text-center group">
-              <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
-                2
-              </div>
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-6 group-hover:scale-105 transition-transform duration-300">
-                <Cpu className="h-7 w-7 text-primary" />
-              </div>
-              <h3 className="text-lg font-bold mb-2">AI מחלץ את הנתונים</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                הבינה המלאכותית מזהה את הספק, הסכום, התאריך, המע&quot;מ ושאר הפרטים — אוטומטית.
-              </p>
-              <div className="mt-6 rounded-xl bg-muted/50 p-4 border border-border/40 text-right space-y-2">
-                <div className="flex justify-between text-xs">
-                  <span className="font-mono tabular-nums text-primary font-semibold">₪156.80</span>
-                  <span className="text-muted-foreground">סכום</span>
+            <ScrollReveal delay={200} className="flex-1 min-w-0">
+              <div className="relative surface surface-hover p-8 text-center group h-full">
+                <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
+                  3
                 </div>
-                <div className="flex justify-between text-xs">
-                  <span className="font-medium">שופרסל דיל</span>
-                  <span className="text-muted-foreground">ספק</span>
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-6 group-hover:scale-105 transition-transform duration-300">
+                  <FileSpreadsheet className="h-7 w-7 text-primary" />
                 </div>
-                <div className="flex justify-between text-xs">
-                  <span className="font-mono tabular-nums">24/03/2026</span>
-                  <span className="text-muted-foreground">תאריך</span>
+                <h3 className="text-lg font-bold mb-2">ייצוא לאקסל בקליק</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  כל הקבלות מסודרות בטבלה. ייצוא לקובץ Excel או CSV — מוכן לרואה חשבון.
+                </p>
+                <div className="mt-6 rounded-xl bg-primary/[0.06] p-4 border border-primary/10">
+                  <div className="flex items-center justify-center gap-2">
+                    <FileSpreadsheet className="h-5 w-5 text-primary" />
+                    <span className="text-sm font-semibold text-primary">project_receipts.xlsx</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1.5">12 קבלות · ₪3,240.50</p>
                 </div>
               </div>
-            </div>
-
-            <div className="relative surface surface-hover p-8 text-center group">
-              <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
-                3
-              </div>
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-6 group-hover:scale-105 transition-transform duration-300">
-                <FileSpreadsheet className="h-7 w-7 text-primary" />
-              </div>
-              <h3 className="text-lg font-bold mb-2">ייצוא לאקסל בקליק</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                כל הקבלות מסודרות בטבלה. ייצוא לקובץ Excel או CSV — מוכן לרואה חשבון.
-              </p>
-              <div className="mt-6 rounded-xl bg-primary/[0.06] p-4 border border-primary/10">
-                <div className="flex items-center justify-center gap-2">
-                  <FileSpreadsheet className="h-5 w-5 text-primary" />
-                  <span className="text-sm font-semibold text-primary">project_receipts.xlsx</span>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1.5">12 קבלות · ₪3,240.50</p>
-              </div>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -185,11 +216,11 @@ export default function LandingPage() {
       {/* ── Features ── */}
       <section className="py-20 sm:py-28 bg-muted/20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="text-center mb-16">
+          <ScrollReveal className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
               למה <span className="text-primary">קבלות</span>?
             </h2>
-          </div>
+          </ScrollReveal>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
@@ -213,17 +244,16 @@ export default function LandingPage() {
                 title: "ייצוא חכם",
                 desc: "Excel, CSV — הכל מוכן לרואה חשבון או להנהלת חשבונות.",
               },
-            ].map((feature) => (
-              <div
-                key={feature.title}
-                className="surface p-6 space-y-3"
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                  <feature.icon className="h-5 w-5 text-primary" />
+            ].map((feature, i) => (
+              <ScrollReveal key={feature.title} delay={i * 75} variant="scale-in">
+                <div className="surface p-6 space-y-3 h-full">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                    <feature.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-bold">{feature.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
                 </div>
-                <h3 className="font-bold">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -232,17 +262,18 @@ export default function LandingPage() {
       {/* ── Pricing ── */}
       <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="text-center mb-16">
+          <ScrollReveal className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
               תמחור פשוט, בלי הפתעות
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
               התחל בחינם. שדרג כשצריך.
             </p>
-          </div>
+          </ScrollReveal>
 
           <div className="grid gap-6 sm:grid-cols-2 max-w-2xl mx-auto">
-            <div className="surface p-8 space-y-6">
+            <ScrollReveal delay={0}>
+            <div className="surface p-8 space-y-6 h-full">
               <div>
                 <h3 className="text-lg font-bold">חינמי</h3>
                 <div className="mt-2 flex items-baseline gap-1">
@@ -266,8 +297,10 @@ export default function LandingPage() {
                 התחל בחינם
               </Link>
             </div>
+            </ScrollReveal>
 
-            <div className="relative surface ring-2 ring-primary/30 p-8 space-y-6">
+            <ScrollReveal delay={90}>
+            <div className="relative surface ring-2 ring-primary/30 p-8 space-y-6 h-full">
               <div className="absolute -top-3 right-6 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full shadow-md">
                 מומלץ
               </div>
@@ -294,6 +327,7 @@ export default function LandingPage() {
                 התחל עכשיו
               </Link>
             </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -301,25 +335,27 @@ export default function LandingPage() {
       {/* ── Final CTA ── */}
       <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="relative surface overflow-hidden px-8 py-14 sm:py-20 sm:px-16 text-center">
-            <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/[0.06] via-transparent to-primary/[0.03]" />
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight max-w-xl mx-auto">
-              מוכן להפסיק לבזבז זמן על קבלות?
-            </h2>
-            <p className="mt-4 text-lg text-muted-foreground max-w-lg mx-auto">
-              הצטרף לאלפי עסקים שכבר מנהלים קבלות בצורה חכמה.
-            </p>
-            <div className="mt-8">
-              <Link
-                href="/?auth=signup"
-                scroll={false}
-                className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-bold text-base rounded-xl px-8 py-3.5 shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all duration-200"
-              >
-                הרשמה חינם
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
+          <ScrollReveal variant="fade-up-soft">
+            <div className="relative surface overflow-hidden px-8 py-14 sm:py-20 sm:px-16 text-center">
+              <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/[0.06] via-transparent to-primary/[0.03]" />
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight max-w-xl mx-auto">
+                מוכן להפסיק לבזבז זמן על קבלות?
+              </h2>
+              <p className="mt-4 text-lg text-muted-foreground max-w-lg mx-auto">
+                הצטרף לאלפי עסקים שכבר מנהלים קבלות בצורה חכמה.
+              </p>
+              <div className="mt-8">
+                <Link
+                  href="/?auth=signup"
+                  scroll={false}
+                  className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-bold text-base rounded-xl px-8 py-3.5 shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all duration-200"
+                >
+                  הרשמה חינם
+                  <ArrowLeft className="h-4 w-4" />
+                </Link>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 

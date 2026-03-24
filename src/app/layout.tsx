@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
-import { Rubik, Heebo } from "next/font/google";
+import localFont from "next/font/local";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-const rubik = Rubik({
-  variable: "--font-rubik",
-  subsets: ["hebrew", "latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const heebo = Heebo({
-  variable: "--font-heebo",
-  subsets: ["hebrew", "latin"],
-  weight: ["300", "400", "500", "600", "700"],
+const pingHebrew = localFont({
+  src: "../../public/fonts/ping/PingHebrewVF.woff2",
+  variable: "--font-ping",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="he" dir="rtl" className={`${rubik.variable} ${heebo.variable} h-full`}>
+    <html lang="he" dir="rtl" className={`${pingHebrew.variable} h-full`}>
       <body className="min-h-full font-sans antialiased">
         {children}
         <Toaster position="bottom-left" dir="rtl" />
