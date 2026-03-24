@@ -59,7 +59,7 @@ export default function TermsPage() {
           השירות מציע מספר תוכניות מנוי:
         </p>
         <ul className="list-disc list-inside space-y-2 text-sm text-foreground/85">
-          <li><strong>תוכנית חינמית:</strong> כוללת עד 5 קבלות בחודש ופרויקט אחד, ללא עלות.</li>
+          <li><strong>תוכנית חינמית:</strong> כוללת עד 5 קבלות בחודש ועד 3 פרויקטים, ללא עלות.</li>
           <li><strong>תוכנית מקצועית:</strong> כוללת עד 500 קבלות בחודש, פרויקטים ללא הגבלה ותמיכה בעדיפות, בתשלום חודשי של ₪30.</li>
         </ul>
         <p className="text-sm leading-relaxed text-foreground/85">

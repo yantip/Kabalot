@@ -6,10 +6,10 @@ export const PLANS = {
     currency: "ILS",
     starPrice: 0,
     receiptsPerMonth: 5,
-    projectsLimit: 1,
+    projectsLimit: 3,
     features: [
       "5 קבלות בחודש",
-      "פרויקט אחד",
+      "עד 3 פרויקטים",
       "חילוץ נתונים אוטומטי",
       "ייצוא CSV",
     ],

@@ -282,7 +282,7 @@ export default function LandingPage() {
                 </div>
               </div>
               <ul className="space-y-3">
-                {["5 קבלות בחודש", "פרויקט אחד", "חילוץ נתונים אוטומטי", "ייצוא CSV"].map((f) => (
+                {["5 קבלות בחודש", "עד 3 פרויקטים", "חילוץ נתונים אוטומטי", "ייצוא CSV"].map((f) => (
                   <li key={f} className="flex items-center gap-2.5 text-sm">
                     <Check className="h-4 w-4 text-primary shrink-0" />
                     {f}
