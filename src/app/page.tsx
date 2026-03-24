@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { ScrollReveal } from "@/components/landing/scroll-reveal";
 import {
-  FlowConnectorHorizontal,
+  FlowConnectorBetween,
   FlowConnectorVertical,
 } from "@/components/landing/flow-connectors";
 
@@ -122,8 +122,8 @@ export default function LandingPage() {
             </p>
           </ScrollReveal>
 
-          <div className="flex flex-col gap-4 lg:gap-0 lg:flex-row lg:items-stretch lg:justify-center max-w-6xl mx-auto">
-            <ScrollReveal delay={0} className="flex-1 min-w-0">
+          <div className="flex flex-col gap-4 lg:gap-0 lg:flex-row lg:items-stretch lg:justify-center max-w-6xl mx-auto lg:px-2 overflow-visible">
+            <ScrollReveal delay={0} className="flex-1 min-w-0 relative z-[1]">
               <div className="relative surface surface-hover p-8 text-center group h-full">
                 <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
                   1
@@ -150,11 +150,11 @@ export default function LandingPage() {
             </ScrollReveal>
 
             <FlowConnectorVertical className="lg:hidden" />
-            <div className="hidden lg:flex items-center justify-center shrink-0 w-10 md:w-14 self-center pt-8">
-              <FlowConnectorHorizontal />
+            <div className="hidden lg:flex relative z-[3] shrink-0 -mx-5 md:-mx-8 xl:-mx-12 min-w-[6rem] sm:min-w-[7.5rem] md:min-w-[9rem] items-center justify-center self-center py-8">
+              <FlowConnectorBetween variant="loop" />
             </div>
 
-            <ScrollReveal delay={100} className="flex-1 min-w-0">
+            <ScrollReveal delay={100} className="flex-1 min-w-0 relative z-[1]">
               <div className="relative surface surface-hover p-8 text-center group h-full">
                 <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
                   2
@@ -184,11 +184,11 @@ export default function LandingPage() {
             </ScrollReveal>
 
             <FlowConnectorVertical className="lg:hidden" />
-            <div className="hidden lg:flex items-center justify-center shrink-0 w-10 md:w-14 self-center pt-8">
-              <FlowConnectorHorizontal />
+            <div className="hidden lg:flex relative z-[3] shrink-0 -mx-5 md:-mx-8 xl:-mx-12 min-w-[6rem] sm:min-w-[7.5rem] md:min-w-[9rem] items-center justify-center self-center py-8">
+              <FlowConnectorBetween variant="wave" />
             </div>
 
-            <ScrollReveal delay={200} className="flex-1 min-w-0">
+            <ScrollReveal delay={200} className="flex-1 min-w-0 relative z-[1]">
               <div className="relative surface surface-hover p-8 text-center group h-full">
                 <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
                   3

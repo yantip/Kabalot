@@ -1,91 +1,108 @@
 "use client";
 
-import { useId } from "react";
 import { cn } from "@/lib/utils";
 
-/** Horizontal connector for RTL row: flow moves toward the next step (left). */
-export function FlowConnectorHorizontal({ className }: { className?: string }) {
-  const id = useId();
-  const gid = `flow-h-${id.replace(/:/g, "")}`;
+const dash = "6 5";
+
+type Variant = "loop" | "wave";
+
+/** Tip at (x,y), pointing left toward the next step. */
+function ArrowHead({ x, y }: { x: number; y: number }) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <path
+        d="M 0 0 L 9 -5.5 L 9 5.5 Z"
+        fill="currentColor"
+        fillOpacity={0.88}
+      />
+    </g>
+  );
+}
+
+/** Desktop: whimsical dashed path between steps (RTL: flows left toward next card). */
+export function FlowConnectorBetween({
+  variant,
+  className,
+}: {
+  variant: Variant;
+  className?: string;
+}) {
+  // Path runs right → left (RTL: from step N toward step N+1)
+  const paths: Record<Variant, { d: string; arrow: { x: number; y: number } }> =
+    {
+      loop: {
+        d: "M 208 46 C 188 46 178 46 168 40 C 156 32 148 32 142 42 C 136 52 128 48 118 46 C 98 46 88 18 78 46 C 68 72 52 46 38 46 C 28 46 22 46 14 46",
+        arrow: { x: 14, y: 46 },
+      },
+      wave: {
+        d: "M 206 44 C 172 44 158 72 132 46 C 106 20 88 72 62 46 C 44 28 28 44 16 44",
+        arrow: { x: 16, y: 44 },
+      },
+    };
+
+  const { d, arrow } = paths[variant];
 
   return (
     <div
       className={cn(
-        "flex items-center justify-center pointer-events-none select-none",
+        "pointer-events-none select-none flex items-center justify-center",
         className
       )}
       aria-hidden
     >
       <svg
-        viewBox="0 0 72 36"
-        className="h-9 w-[4.5rem] sm:w-[5rem] text-primary max-w-full"
+        viewBox="0 0 220 92"
+        className="h-[5.5rem] w-[min(100%,13rem)] sm:w-[15rem] md:w-[17rem] text-primary overflow-visible"
         fill="none"
       >
-        <defs>
-          <linearGradient id={gid} x1="100%" y1="50%" x2="0%" y2="50%">
-            <stop offset="0%" stopColor="currentColor" stopOpacity="0.15" />
-            <stop offset="55%" stopColor="currentColor" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="currentColor" stopOpacity="0.85" />
-          </linearGradient>
-        </defs>
         <path
-          d="M 68 18 H 14"
-          stroke={`url(#${gid})`}
-          strokeWidth="2"
-          strokeLinecap="round"
-          className="flow-connector-line"
-        />
-        <path
-          d="M 18 11 L 8 18 L 18 25"
+          d={d}
           stroke="currentColor"
-          strokeWidth="2.25"
+          strokeWidth="2.15"
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeOpacity="0.9"
+          strokeDasharray={dash}
+          fill="none"
+          strokeOpacity={0.88}
+          className="flow-connector-hand"
         />
-        <circle cx="68" cy="18" r="3" fill="currentColor" fillOpacity="0.35" />
+        <ArrowHead x={arrow.x} y={arrow.y} />
       </svg>
     </div>
   );
 }
 
-/** Vertical connector for stacked steps on small screens. */
+/** Mobile: wavy vertical dashed connector (top → bottom). */
 export function FlowConnectorVertical({ className }: { className?: string }) {
-  const id = useId();
-  const gid = `flow-v-${id.replace(/:/g, "")}`;
-
   return (
     <div
       className={cn(
-        "flex items-center justify-center py-1 pointer-events-none select-none",
+        "flex items-center justify-center py-2 pointer-events-none select-none",
         className
       )}
       aria-hidden
     >
-      <svg viewBox="0 0 36 56" className="h-14 w-9 text-primary" fill="none">
-        <defs>
-          <linearGradient id={gid} x1="50%" y1="0%" x2="50%" y2="100%">
-            <stop offset="0%" stopColor="currentColor" stopOpacity="0.2" />
-            <stop offset="50%" stopColor="currentColor" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="currentColor" stopOpacity="0.85" />
-          </linearGradient>
-        </defs>
+      <svg
+        viewBox="0 0 48 120"
+        className="h-28 w-12 text-primary overflow-visible"
+        fill="none"
+      >
         <path
-          d="M 18 6 V 42"
-          stroke={`url(#${gid})`}
-          strokeWidth="2"
-          strokeLinecap="round"
-          className="flow-connector-line"
-        />
-        <path
-          d="M 11 38 L 18 48 L 25 38"
+          d="M 24 8 C 24 32 38 48 24 60 C 10 72 24 88 24 112"
           stroke="currentColor"
-          strokeWidth="2.25"
+          strokeWidth="2.15"
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeOpacity="0.9"
+          strokeDasharray={dash}
+          fill="none"
+          strokeOpacity={0.88}
+          className="flow-connector-hand"
         />
-        <circle cx="18" cy="6" r="3" fill="currentColor" fillOpacity="0.35" />
+        <path
+          d="M 24 112 l -4 -10 h 8 z"
+          fill="currentColor"
+          fillOpacity={0.85}
+        />
       </svg>
     </div>
   );

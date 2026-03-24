@@ -76,10 +76,6 @@
   50% { transform: translateY(-4px); }
 }
 
-@keyframes flow-dash {
-  to { stroke-dashoffset: -14; }
-}
-
 :root {
   --background: oklch(0.985 0 0);
   --foreground: oklch(0.145 0.015 260);
@@ -223,10 +219,9 @@
     transform: translate3d(0, 0, 0) scale(1);
   }
 
-  .flow-connector-line {
-    stroke-dasharray: 8 6;
-    stroke-dashoffset: 0;
-    animation: flow-dash 2.4s linear infinite;
+  /* Hand-drawn style dashed connectors (landing flow steps) */
+  .flow-connector-hand {
+    stroke-dasharray: 6 5;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -234,10 +229,6 @@
       opacity: 1 !important;
       transform: none !important;
       transition: none !important;
-    }
-    .flow-connector-line {
-      animation: none;
-      stroke-dasharray: none;
     }
   }
 }
