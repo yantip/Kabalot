@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function AuthLayout({
   children,
 }: {
@@ -18,6 +20,19 @@ export default function AuthLayout({
         />
       </div>
       <div className="w-full max-w-[440px] animate-scale-in">{children}</div>
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
+        <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground/80">
+          <Link href="/terms-of-service" className="hover:text-foreground transition-colors">
+            Terms of Service
+          </Link>
+          <Link href="/privacy-policy" className="hover:text-foreground transition-colors">
+            Privacy Policy
+          </Link>
+          <Link href="/refund-policy" className="hover:text-foreground transition-colors">
+            Refund Policy
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
