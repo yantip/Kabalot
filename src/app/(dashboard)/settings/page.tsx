@@ -44,20 +44,20 @@ export default async function SettingsPage() {
           <p className="text-sm text-muted-foreground">נהל את החשבון וההגדרות שלך</p>
         </div>
         {isConnected && (
-          <span className="inline-flex items-center gap-2 rounded-full bg-warm-green/10 px-3.5 py-2 text-xs font-semibold text-warm-green ring-1 ring-warm-green/20">
-            <span className="h-2 w-2 rounded-full bg-warm-green animate-pulse" />
+          <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-2 text-xs font-semibold text-primary ring-1 ring-primary/20">
+            <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
             טלגרם מחובר
           </span>
         )}
       </div>
 
-      <Card className="border-0 shadow-sm shadow-foreground/[0.03] border-r-[3px] border-r-primary/40 rounded-2xl">
+      <Card className="border-0 surface rounded-2xl">
         <CardHeader>
           <CardTitle>פרופיל</CardTitle>
           <CardDescription>פרטי החשבון שלך</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex justify-between items-center py-2 border-b border-border/30 last:border-0">
+          <div className="flex justify-between items-center py-2 border-b border-border/40 last:border-0">
             <span className="text-sm text-muted-foreground">אימייל</span>
             <span className="text-sm font-medium" dir="ltr">
               {user.email}
@@ -70,18 +70,18 @@ export default async function SettingsPage() {
         </CardContent>
       </Card>
 
-      <Card className="border-0 shadow-sm shadow-foreground/[0.03] border-r-[3px] border-r-warm-amber/40 rounded-2xl">
+      <Card className="border-0 surface rounded-2xl">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className={cn(
                 "flex h-10 w-10 items-center justify-center rounded-xl",
                 subscription.plan_id === "pro"
-                  ? "bg-gradient-to-br from-warm-amber/20 to-warm-amber/5"
+                  ? "bg-primary/10"
                   : "bg-muted"
               )}>
                 {subscription.plan_id === "pro" ? (
-                  <Sparkles className="h-5 w-5 text-warm-amber" />
+                  <Sparkles className="h-5 w-5 text-primary" />
                 ) : (
                   <Zap className="h-5 w-5 text-muted-foreground" />
                 )}
@@ -109,8 +109,8 @@ export default async function SettingsPage() {
               className={cn(
                 "h-full rounded-full transition-all duration-700 ease-out",
                 usagePercent >= 80
-                  ? "bg-gradient-to-l from-warm-rose to-warm-amber shadow-[0_0_8px] shadow-warm-rose/30"
-                  : "bg-gradient-to-l from-primary to-primary/60"
+                  ? "bg-destructive"
+                  : "bg-primary"
               )}
               style={{ width: `${usagePercent}%` }}
             />

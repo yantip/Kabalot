@@ -14,7 +14,7 @@ export default function NewProjectPage() {
         <h1 className="text-3xl font-bold tracking-tight">פרויקט חדש</h1>
         <p className="text-sm text-muted-foreground">צור פרויקט חדש לאיסוף קבלות</p>
       </div>
-      <Card className="border-0 shadow-sm shadow-foreground/[0.03] border-r-[3px] border-r-primary/50 rounded-2xl">
+      <Card className="border-0 surface rounded-2xl">
         <CardHeader>
           <CardTitle>פרטי הפרויקט</CardTitle>
           <CardDescription>

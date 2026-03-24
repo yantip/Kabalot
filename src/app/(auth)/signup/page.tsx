@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { signup } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +13,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Receipt } from "lucide-react";
 
 export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
@@ -29,13 +29,19 @@ export default function SignupPage() {
   }
 
   return (
-    <Card className="glass-strong border-0 shadow-2xl shadow-primary/[0.06] rounded-2xl">
+    <Card className="border-0 bg-card shadow-2xl shadow-black/20 rounded-2xl">
       <CardHeader className="text-center space-y-5 pb-2 pt-8">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-warm-amber text-primary-foreground shadow-lg shadow-primary/25 transition-transform hover:scale-105 duration-300">
-          <Receipt className="h-8 w-8" />
+        <div className="mx-auto">
+          <Image
+            src="/imgs/Kabalot-logo.png"
+            alt="קבלות"
+            width={140}
+            height={50}
+            className="h-12 w-auto"
+            priority
+          />
         </div>
         <div className="space-y-1.5">
-          <h1 className="text-3xl font-bold tracking-tight">קבלות</h1>
           <p className="text-sm text-muted-foreground">צור חשבון חדש כדי להתחיל לנהל קבלות</p>
         </div>
       </CardHeader>
@@ -77,7 +83,7 @@ export default function SignupPage() {
           </div>
           <Button
             type="submit"
-            className="w-full h-12 text-sm font-bold rounded-xl btn-gradient shadow-lg shadow-primary/20"
+            className="w-full h-12 text-sm font-bold rounded-xl shadow-md"
             disabled={loading}
           >
             {loading ? "נרשם..." : "צור חשבון"}

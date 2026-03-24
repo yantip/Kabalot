@@ -7,23 +7,23 @@ const statusConfig: Record<
 > = {
   processing: {
     label: "בעיבוד",
-    className: "bg-warm-amber/10 text-warm-amber border-warm-amber/20",
-    dotClassName: "bg-warm-amber animate-pulse",
+    className: "bg-warning/10 text-warning border-warning/20",
+    dotClassName: "bg-warning animate-pulse",
   },
   needs_review: {
     label: "לבדיקה",
-    className: "bg-primary/10 text-primary border-primary/20",
-    dotClassName: "bg-primary",
+    className: "bg-info/10 text-info border-info/20",
+    dotClassName: "bg-info",
   },
   confirmed: {
     label: "מאושר",
-    className: "bg-warm-green/10 text-warm-green border-warm-green/20",
-    dotClassName: "bg-warm-green",
+    className: "bg-primary/10 text-primary border-primary/20",
+    dotClassName: "bg-primary",
   },
   failed: {
     label: "נכשל",
-    className: "bg-warm-rose/10 text-warm-rose border-warm-rose/20",
-    dotClassName: "bg-warm-rose",
+    className: "bg-destructive/10 text-destructive border-destructive/20",
+    dotClassName: "bg-destructive",
   },
 };
 

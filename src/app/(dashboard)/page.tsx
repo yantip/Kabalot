@@ -69,43 +69,39 @@ export default async function DashboardPage() {
       label: 'סה"כ קבלות',
       value: receiptCount ?? 0,
       icon: Receipt,
-      accentBg: "bg-gradient-to-br from-warm-amber/15 to-warm-amber/5",
-      iconColor: "text-warm-amber",
-      borderColor: "border-r-warm-amber",
+      iconBg: "bg-primary/10",
+      iconColor: "text-primary",
     },
     {
       label: "פרויקטים",
       value: projectCount ?? 0,
       icon: FolderOpen,
-      accentBg: "bg-primary/[0.08]",
-      iconColor: "text-primary",
-      borderColor: "border-r-primary",
+      iconBg: "bg-info/10",
+      iconColor: "text-info",
     },
     {
       label: "ממתינות לבדיקה",
       value: pendingCount ?? 0,
       icon: AlertCircle,
-      accentBg: "bg-warm-rose/10",
-      iconColor: "text-warm-rose",
-      borderColor: "border-r-warm-rose",
+      iconBg: "bg-warning/10",
+      iconColor: "text-warning",
     },
     {
       label: "מאושרות",
       value: confirmedCount ?? 0,
       icon: CheckCircle2,
-      accentBg: "bg-warm-green/10",
-      iconColor: "text-warm-green",
-      borderColor: "border-r-warm-green",
+      iconBg: "bg-primary/10",
+      iconColor: "text-primary",
     },
   ];
 
   return (
     <div className="space-y-8">
       {!isConnected && (
-        <div className="animate-slide-up rounded-2xl bg-gradient-to-l from-warm-amber/[0.1] via-warm-amber/[0.04] to-transparent ring-1 ring-warm-amber/15 p-5 sm:p-6">
+        <div className="animate-slide-up surface p-5 sm:p-6">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-warm-amber/25 to-warm-amber/10">
-              <MessageCircle className="h-5.5 w-5.5 text-warm-amber" />
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+              <MessageCircle className="h-5.5 w-5.5 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-bold text-foreground text-base">חבר את הטלגרם שלך</p>
@@ -121,28 +117,26 @@ export default async function DashboardPage() {
         </div>
       )}
 
-      {/* Bento stat grid */}
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, i) => (
           <Card
             key={stat.label}
             className={cn(
-              "animate-slide-up border-0 shadow-sm shadow-foreground/[0.03] card-glow overflow-hidden border-r-[3px]",
-              stat.borderColor,
+              "animate-slide-up border-0 surface surface-hover overflow-hidden",
               `stagger-${i + 1}`
             )}
           >
-            <CardContent className="pt-5">
-              <div className="flex items-center justify-between mb-3">
+            <CardContent className="pt-5 pb-5">
+              <div className="flex items-center justify-between mb-4">
                 <span className="text-sm font-medium text-muted-foreground">{stat.label}</span>
                 <div className={cn(
-                  "flex h-9 w-9 items-center justify-center rounded-xl",
-                  stat.accentBg,
+                  "flex h-10 w-10 items-center justify-center rounded-xl",
+                  stat.iconBg,
                 )}>
-                  <stat.icon className={cn(stat.iconColor, "h-4 w-4")} />
+                  <stat.icon className={cn(stat.iconColor, "h-5 w-5")} />
                 </div>
               </div>
-              <div className="text-3xl font-bold tabular-nums tracking-tight">{stat.value}</div>
+              <div className="text-4xl font-bold tabular-nums tracking-tight">{stat.value}</div>
             </CardContent>
           </Card>
         ))}
@@ -150,18 +144,18 @@ export default async function DashboardPage() {
 
       {subscription.plan_id === "free" && (
         <div className={cn(
-          "animate-slide-up stagger-5 rounded-2xl p-5 transition-colors ring-1",
+          "animate-slide-up stagger-5 surface p-5 transition-colors",
           isNearLimit
-            ? "bg-gradient-to-l from-warm-rose/[0.08] via-warm-amber/[0.04] to-transparent ring-warm-rose/20"
-            : "bg-gradient-to-l from-primary/[0.06] via-primary/[0.02] to-transparent ring-border/50"
+            ? "ring-destructive/20"
+            : ""
         )}>
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3.5 min-w-0">
               <div className={cn(
                 "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
-                isNearLimit ? "bg-warm-rose/15" : "bg-primary/[0.1]"
+                isNearLimit ? "bg-destructive/10" : "bg-primary/10"
               )}>
-                <Sparkles className={cn("h-5 w-5", isNearLimit ? "text-warm-rose" : "text-primary")} />
+                <Sparkles className={cn("h-5 w-5", isNearLimit ? "text-destructive" : "text-primary")} />
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold">
@@ -172,8 +166,8 @@ export default async function DashboardPage() {
                     className={cn(
                       "h-full rounded-full transition-all duration-700 ease-out",
                       isNearLimit
-                        ? "bg-gradient-to-l from-warm-rose to-warm-amber shadow-[0_0_8px] shadow-warm-rose/30"
-                        : "bg-gradient-to-l from-primary to-primary/60"
+                        ? "bg-destructive"
+                        : "bg-primary"
                     )}
                     style={{ width: `${usagePercent}%` }}
                   />
@@ -189,16 +183,16 @@ export default async function DashboardPage() {
       )}
 
       {(projectCount ?? 0) === 0 && (
-        <Card className="animate-slide-up stagger-6 border-dashed border-2 border-border/50 bg-gradient-to-br from-primary/[0.03] to-transparent shadow-none rounded-2xl">
+        <Card className="animate-slide-up stagger-6 border-dashed border-2 border-border bg-muted/20 shadow-none rounded-2xl">
           <CardHeader className="text-center pb-2">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/15 to-warm-amber/10 mb-3">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-3">
               <FolderOpen className="h-8 w-8 text-primary" />
             </div>
             <CardTitle className="text-xl font-bold">התחל עכשיו</CardTitle>
             <CardDescription className="text-base">צור את הפרויקט הראשון שלך כדי להתחיל לאסוף קבלות</CardDescription>
           </CardHeader>
           <CardContent className="text-center pb-8">
-            <Link href="/projects/new" className={cn(buttonVariants(), "rounded-xl btn-gradient shadow-lg shadow-primary/20 h-10 px-6")}>
+            <Link href="/projects/new" className={cn(buttonVariants(), "rounded-xl shadow-md h-10 px-6")}>
               צור פרויקט חדש
             </Link>
           </CardContent>

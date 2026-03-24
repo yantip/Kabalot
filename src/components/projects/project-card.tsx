@@ -48,10 +48,10 @@ export function ProjectCard({
   return (
     <div className="group relative">
       <Link href={`/projects/${id}`}>
-        <Card className="h-full cursor-pointer border-0 border-r-[3px] border-r-warm-amber/60 ring-0 shadow-sm shadow-foreground/[0.03] card-glow overflow-hidden transition-all duration-300">
+        <Card className="h-full cursor-pointer border-0 surface surface-hover overflow-hidden transition-all duration-200">
           <CardHeader className="flex flex-row items-start gap-4 px-5 pt-5 pb-0">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-warm-amber/20 to-warm-amber/5">
-              <FolderOpen className="h-5 w-5 text-warm-amber" />
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+              <FolderOpen className="h-5 w-5 text-primary" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 pe-8">
@@ -66,11 +66,11 @@ export function ProjectCard({
           </CardHeader>
           <CardContent className="px-5 pb-5 pt-5">
             <div className="flex items-center gap-2.5 text-sm">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-warm-amber/10">
-                <Receipt className="h-3.5 w-3.5 text-warm-amber" />
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-muted">
+                <Receipt className="h-3.5 w-3.5 text-muted-foreground" />
               </div>
               <span>
-                <span className="tabular-nums font-semibold text-warm-amber">
+                <span className="tabular-nums font-semibold">
                   {receiptCount}
                 </span>{" "}
                 <span className="text-muted-foreground">קבלות</span>

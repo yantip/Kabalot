@@ -51,7 +51,7 @@ export default async function ProjectsPage() {
           href="/projects/new"
           className={cn(
             buttonVariants(),
-            "gap-2 shrink-0 rounded-xl btn-gradient shadow-lg shadow-primary/15 h-10 px-5"
+            "gap-2 shrink-0 rounded-xl shadow-md h-10 px-5"
           )}
         >
           <Plus className="h-4 w-4" />
@@ -60,9 +60,9 @@ export default async function ProjectsPage() {
       </div>
 
       {projectsWithCounts.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border/50 bg-gradient-to-br from-warm-amber/[0.04] to-transparent p-16 text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-warm-amber/20 to-warm-amber/5 mb-4">
-            <FolderOpen className="h-8 w-8 text-warm-amber" />
+        <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/20 p-16 text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4">
+            <FolderOpen className="h-8 w-8 text-primary" />
           </div>
           <h3 className="text-xl font-bold tracking-tight">אין פרויקטים</h3>
           <p className="mt-2 text-sm text-muted-foreground max-w-xs leading-relaxed">
@@ -72,7 +72,7 @@ export default async function ProjectsPage() {
             href="/projects/new"
             className={cn(
               buttonVariants(),
-              "mt-6 rounded-xl btn-gradient shadow-lg shadow-primary/15"
+              "mt-6 rounded-xl shadow-md"
             )}
           >
             צור פרויקט

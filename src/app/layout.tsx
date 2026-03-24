@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="he" dir="rtl" className={`${rubik.variable} ${heebo.variable} h-full`}>
-      <body className="min-h-full font-sans antialiased grain">
+      <body className="min-h-full font-sans antialiased">
         {children}
         <Toaster position="bottom-left" dir="rtl" />
       </body>

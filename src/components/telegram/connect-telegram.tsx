@@ -45,11 +45,11 @@ export function ConnectTelegram({ isConnected }: ConnectTelegramProps) {
 
   if (isConnected) {
     return (
-      <Card className="border-0 shadow-sm shadow-foreground/[0.03] border-r-[3px] border-r-warm-green/50 rounded-2xl">
+      <Card className="border-0 surface rounded-2xl">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-warm-green/20 to-warm-green/5">
-              <MessageCircle className="h-5 w-5 text-warm-green" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
+              <MessageCircle className="h-5 w-5 text-primary" />
             </div>
             <div>
               <CardTitle>טלגרם מחובר</CardTitle>
@@ -71,10 +71,10 @@ export function ConnectTelegram({ isConnected }: ConnectTelegramProps) {
   }
 
   return (
-    <Card className="border-0 shadow-sm shadow-foreground/[0.03] border-r-[3px] border-r-primary/40 rounded-2xl">
+    <Card className="border-0 surface rounded-2xl">
       <CardHeader>
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
             <MessageCircle className="h-5 w-5 text-primary" />
           </div>
           <div>
@@ -87,7 +87,7 @@ export function ConnectTelegram({ isConnected }: ConnectTelegramProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         {!deepLink ? (
-          <Button onClick={handleGenerateLink} disabled={loading} className="gap-2 rounded-xl btn-gradient shadow-lg shadow-primary/15">
+          <Button onClick={handleGenerateLink} disabled={loading} className="gap-2 rounded-xl shadow-md">
             {loading ? (
               <RefreshCw className="h-4 w-4 animate-spin" />
             ) : (
@@ -103,7 +103,7 @@ export function ConnectTelegram({ isConnected }: ConnectTelegramProps) {
               הקישור תקף ל-10 דקות.
             </p>
             <div className="flex gap-2">
-              <a href={deepLink} target="_blank" rel="noopener noreferrer" className={buttonVariants({ className: "rounded-xl btn-gradient shadow-lg shadow-primary/15" })}>
+              <a href={deepLink} target="_blank" rel="noopener noreferrer" className={buttonVariants({ className: "rounded-xl shadow-md" })}>
                 <ExternalLink className="h-4 w-4 me-2" />
                 פתח בטלגרם
               </a>

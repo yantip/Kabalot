@@ -20,12 +20,10 @@ export function ExportDropdown({ projectId }: { projectId: string }) {
       <DropdownMenuTrigger
         className={cn(
           buttonVariants({ variant: "outline", size: "sm" }),
-          "gap-2 h-9 pr-3 pl-2 shadow-sm shadow-foreground/[0.03]"
+          "gap-2 h-9 rounded-xl"
         )}
       >
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-warm-green/15">
-          <Download className="h-3.5 w-3.5 text-warm-green" />
-        </span>
+        <Download className="h-3.5 w-3.5" />
         ייצוא
         <ChevronDown className="h-3 w-3 text-muted-foreground" />
       </DropdownMenuTrigger>
@@ -41,7 +39,7 @@ export function ExportDropdown({ projectId }: { projectId: string }) {
           className="gap-2"
           onClick={() => download(`/api/export/${projectId}/excel`)}
         >
-          <FileSpreadsheet className="h-4 w-4 text-warm-green" />
+          <FileSpreadsheet className="h-4 w-4 text-primary" />
           ייצוא Excel
         </DropdownMenuItem>
       </DropdownMenuContent>

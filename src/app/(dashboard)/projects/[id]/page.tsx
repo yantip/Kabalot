@@ -51,8 +51,8 @@ export default async function ProjectDetailPage({ params }: Props) {
     <div className="space-y-8 animate-slide-up">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex gap-3.5 min-w-0">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-warm-amber/20 to-warm-amber/5">
-            <FolderOpen className="h-6 w-6 text-warm-amber" />
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+            <FolderOpen className="h-6 w-6 text-primary" />
           </div>
           <div className="min-w-0 space-y-1.5">
             <h1 className="text-3xl font-bold tracking-tight">{project.name}</h1>
@@ -69,12 +69,10 @@ export default async function ProjectDetailPage({ params }: Props) {
             href={`/projects/${id}/settings`}
             className={cn(
               buttonVariants({ variant: "outline", size: "sm" }),
-              "gap-2 h-9 pr-3 pl-2 rounded-xl shadow-sm shadow-foreground/[0.03]"
+              "gap-2 h-9 pr-3 pl-2 rounded-xl"
             )}
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-warm-rose/15">
-              <Settings className="h-3.5 w-3.5 text-warm-rose" />
-            </span>
+            <Settings className="h-3.5 w-3.5" />
             הגדרות
           </Link>
         </div>

@@ -62,7 +62,7 @@ export function CreateProjectForm() {
 
       <FieldSelector enabledFields={enabledFields} onChange={setEnabledFields} />
 
-      <Button type="submit" disabled={loading || enabledFields.length === 0} className="gap-2 rounded-xl btn-gradient shadow-lg shadow-primary/15">
+      <Button type="submit" disabled={loading || enabledFields.length === 0} className="gap-2 rounded-xl shadow-md">
         {loading && <Loader2 className="h-4 w-4 animate-spin" />}
         {loading ? "יוצר פרויקט..." : "צור פרויקט"}
       </Button>

@@ -23,10 +23,10 @@ export async function Header() {
   const displayName = profile?.full_name || user?.email;
 
   return (
-    <div className="pb-2">
-      <p className="text-base text-muted-foreground">
+    <div className="pb-1">
+      <p className="text-lg text-muted-foreground">
         {greeting},{" "}
-        <span className="font-semibold text-foreground">{displayName}</span>
+        <span className="font-bold text-primary">{displayName}</span>
       </p>
     </div>
   );

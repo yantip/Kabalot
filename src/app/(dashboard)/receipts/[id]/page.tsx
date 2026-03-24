@@ -177,7 +177,7 @@ export default function ReceiptDetailPage() {
           <h1 className="text-3xl font-bold tracking-tight">פרטי קבלה</h1>
           <StatusBadge status={receipt.status as ReceiptStatus} />
           {receipt.is_duplicate_suspect && (
-            <Badge variant="outline" className="bg-warm-amber/10 text-warm-amber border-warm-amber/20 gap-1.5">
+            <Badge variant="outline" className="bg-warning/10 text-warning border-warning/20 gap-1.5">
               <AlertTriangle className="h-3 w-3" />
               חשד לכפילות
             </Badge>
@@ -198,12 +198,12 @@ export default function ReceiptDetailPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="border-0 shadow-sm shadow-foreground/[0.03] border-r-[3px] border-r-warm-amber/50 rounded-2xl">
+        <Card className="border-0 surface rounded-2xl">
           <CardHeader>
             <CardTitle>תמונת קבלה</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="relative w-full overflow-hidden rounded-xl ring-1 ring-warm-amber/20 bg-muted/20 shadow-inner aspect-[3/4]">
+            <div className="relative w-full overflow-hidden rounded-xl ring-1 ring-border bg-muted/30 aspect-[3/4]">
               <Image
                 src={receipt.image_url}
                 alt="תמונת קבלה"
@@ -222,7 +222,7 @@ export default function ReceiptDetailPage() {
         </Card>
 
         <div className="space-y-6">
-          <Card className="border-0 shadow-sm shadow-foreground/[0.03] border-r-[3px] border-r-primary/50 rounded-2xl">
+          <Card className="border-0 surface rounded-2xl">
             <CardHeader>
               <CardTitle>נתוני הקבלה</CardTitle>
               <CardDescription>
@@ -342,7 +342,7 @@ export default function ReceiptDetailPage() {
               {saving ? "שומר..." : "שמור"}
             </Button>
             {receipt.status !== "confirmed" && (
-              <Button onClick={handleConfirm} disabled={saving} className="gap-1.5 rounded-xl btn-gradient shadow-lg shadow-primary/15">
+              <Button onClick={handleConfirm} disabled={saving} className="gap-1.5 rounded-xl shadow-md">
                 <CheckCircle2 className="h-4 w-4" />
                 שמור ואשר
               </Button>

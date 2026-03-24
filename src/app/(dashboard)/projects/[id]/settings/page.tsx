@@ -103,7 +103,7 @@ export default function ProjectSettingsPage() {
         </div>
       </div>
 
-      <Card className="border-0 shadow-sm shadow-foreground/[0.03] border-r-[3px] border-r-primary/50 rounded-2xl">
+      <Card className="border-0 surface rounded-2xl">
         <CardHeader>
           <CardTitle>פרטים כלליים</CardTitle>
         </CardHeader>
@@ -125,7 +125,7 @@ export default function ProjectSettingsPage() {
         </CardContent>
       </Card>
 
-      <Card className="border-0 shadow-sm shadow-foreground/[0.03] border-r-[3px] border-r-warm-amber/50 rounded-2xl">
+      <Card className="border-0 surface rounded-2xl">
         <CardHeader>
           <CardTitle>שדות</CardTitle>
           <CardDescription>בחר אילו שדות יוצגו בטבלת הקבלות</CardDescription>
@@ -136,7 +136,7 @@ export default function ProjectSettingsPage() {
       </Card>
 
       <div className="flex justify-between">
-        <Button onClick={handleSave} disabled={saving} className="rounded-xl btn-gradient shadow-lg shadow-primary/15">
+        <Button onClick={handleSave} disabled={saving} className="rounded-xl shadow-md">
           {saving ? "שומר..." : "שמור שינויים"}
         </Button>
         <Button variant="destructive" onClick={handleDelete} className="rounded-xl">

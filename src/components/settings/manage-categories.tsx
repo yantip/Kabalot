@@ -86,11 +86,11 @@ export function ManageCategories({ categories: initial }: ManageCategoriesProps)
   }
 
   return (
-    <Card className="border-0 shadow-sm shadow-foreground/[0.03] border-r-[3px] border-r-warm-rose/40 rounded-2xl">
+    <Card className="border-0 surface rounded-2xl">
       <CardHeader>
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-warm-rose/15 to-warm-rose/5">
-            <Tag className="h-5 w-5 text-warm-rose" />
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-muted">
+            <Tag className="h-5 w-5 text-muted-foreground" />
           </div>
           <div>
             <CardTitle>קטגוריות</CardTitle>
@@ -120,7 +120,7 @@ export function ManageCategories({ categories: initial }: ManageCategoriesProps)
             {categories.map((cat) => (
               <div
                 key={cat.id}
-                className="flex items-center gap-2 rounded-xl px-3 py-2 bg-muted/30 ring-1 ring-border/30"
+                className="flex items-center gap-2 rounded-xl px-3 py-2 bg-muted/40 ring-1 ring-border/40"
               >
                 {editingId === cat.id ? (
                   <>
@@ -137,7 +137,7 @@ export function ManageCategories({ categories: initial }: ManageCategoriesProps)
                       onClick={() => handleUpdate(cat.id)}
                       className="shrink-0"
                     >
-                      <Check className="h-3.5 w-3.5 text-warm-green" />
+                      <Check className="h-3.5 w-3.5 text-primary" />
                     </Button>
                     <Button
                       variant="ghost"

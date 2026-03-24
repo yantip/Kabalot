@@ -68,18 +68,18 @@ export default async function ManageBillingPage() {
         </div>
       </div>
 
-      <Card className="border-0 shadow-sm shadow-foreground/[0.03] border-r-[3px] border-r-warm-amber/50 rounded-2xl">
+      <Card className="border-0 surface rounded-2xl">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className={cn(
                 "flex h-10 w-10 items-center justify-center rounded-xl",
                 subscription.plan_id === "pro"
-                  ? "bg-gradient-to-br from-warm-amber/25 to-warm-amber/5"
+                  ? "bg-primary/10"
                   : "bg-muted"
               )}>
                 {subscription.plan_id === "pro" ? (
-                  <Sparkles className="h-5 w-5 text-warm-amber" />
+                  <Sparkles className="h-5 w-5 text-primary" />
                 ) : (
                   <Receipt className="h-5 w-5 text-muted-foreground" />
                 )}
@@ -108,8 +108,8 @@ export default async function ManageBillingPage() {
               className={cn(
                 "h-full rounded-full transition-all duration-700 ease-out",
                 usagePercent >= 80
-                  ? "bg-gradient-to-l from-warm-rose to-warm-amber shadow-[0_0_8px] shadow-warm-rose/30"
-                  : "bg-gradient-to-l from-primary to-primary/60"
+                  ? "bg-destructive"
+                  : "bg-primary"
               )}
               style={{ width: `${usagePercent}%` }}
             />
@@ -128,7 +128,7 @@ export default async function ManageBillingPage() {
             {subscription.plan_id === "free" ? (
               <Link
                 href="/billing/checkout"
-                className={cn(buttonVariants({ size: "sm" }), "rounded-xl btn-gradient shadow-lg shadow-primary/15")}
+                className={cn(buttonVariants({ size: "sm" }), "rounded-xl shadow-md")}
               >
                 שדרג למקצועי
               </Link>
@@ -139,16 +139,16 @@ export default async function ManageBillingPage() {
         </CardContent>
       </Card>
 
-      <Card className="border-0 shadow-sm shadow-foreground/[0.03] rounded-2xl">
+      <Card className="border-0 surface rounded-2xl">
         <CardHeader className="pb-3">
           <CardTitle className="text-base font-bold">היסטוריית חשבוניות</CardTitle>
           <CardDescription>רשימת החיובים והחשבוניות שלך</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-xl ring-1 ring-border/40 overflow-hidden">
+          <div className="rounded-xl ring-1 ring-border/50 overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gradient-to-l from-muted/50 to-muted/30">
+                <TableRow className="bg-muted/40">
                   <TableHead className="font-semibold">תאריך</TableHead>
                   <TableHead className="font-semibold">תיאור</TableHead>
                   <TableHead className="font-semibold">סכום</TableHead>
@@ -159,7 +159,7 @@ export default async function ManageBillingPage() {
                 <TableRow>
                   <TableCell colSpan={4}>
                     <div className="flex flex-col items-center justify-center py-10 text-center">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-muted/80 mb-3">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-muted mb-3">
                         <FileText className="h-5 w-5 text-muted-foreground" />
                       </div>
                       <p className="text-sm font-semibold text-muted-foreground">

@@ -63,10 +63,10 @@ export default async function CheckoutPage() {
       </div>
 
       <div className="grid gap-5 sm:grid-cols-5">
-        <Card className="sm:col-span-2 border-0 shadow-sm shadow-foreground/[0.03] h-fit border-r-[3px] border-r-warm-amber/50 rounded-2xl">
+        <Card className="sm:col-span-2 border-0 surface h-fit rounded-2xl">
           <CardHeader className="pb-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-warm-amber/25 to-warm-amber/5 mb-2">
-              <Sparkles className="h-5 w-5 text-warm-amber" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 mb-2">
+              <Sparkles className="h-5 w-5 text-primary" />
             </div>
             <CardTitle className="text-base font-bold">{plan.name}</CardTitle>
             <CardDescription>סיכום הזמנה</CardDescription>
@@ -75,7 +75,7 @@ export default async function CheckoutPage() {
             <ul className="space-y-2.5">
               {plan.features.map((feature) => (
                 <li key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Check className="h-3.5 w-3.5 text-warm-green shrink-0" />
+                  <Check className="h-3.5 w-3.5 text-primary shrink-0" />
                   {feature}
                 </li>
               ))}
@@ -84,13 +84,13 @@ export default async function CheckoutPage() {
             <div className="flex items-baseline justify-between">
               <span className="text-sm font-semibold">סה&quot;כ לחודש</span>
               <span className="text-2xl font-bold flex items-center gap-1">
-                {plan.starPrice} <Star className="h-5 w-5 text-warm-amber fill-warm-amber" />
+                {plan.starPrice} <Star className="h-5 w-5 text-primary fill-primary" />
               </span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="sm:col-span-3 border-0 shadow-sm shadow-foreground/[0.03] rounded-2xl">
+        <Card className="sm:col-span-3 border-0 surface rounded-2xl">
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2 font-bold">
               <MessageCircle className="h-4 w-4 text-muted-foreground" />
@@ -98,15 +98,15 @@ export default async function CheckoutPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-5">
-            <div className="rounded-xl bg-[hsl(200,80%,96%)] ring-1 ring-[hsl(200,60%,80%)]/30 p-5 space-y-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[hsl(200,60%,50%)]/15 mx-auto">
-                <Star className="h-6 w-6 text-[hsl(200,60%,50%)]" />
+            <div className="rounded-xl bg-primary/[0.05] ring-1 ring-primary/15 p-5 space-y-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mx-auto">
+                <Star className="h-6 w-6 text-primary" />
               </div>
               <p className="text-sm font-semibold text-center">
                 התשלום מתבצע באמצעות Telegram Stars
               </p>
               <p className="text-xs text-muted-foreground text-center leading-relaxed">
-                שלח את הפקודה <code className="bg-muted/80 px-1.5 py-0.5 rounded-md font-mono">/upgrade</code> לבוט הטלגרם שלנו
+                שלח את הפקודה <code className="bg-muted px-1.5 py-0.5 rounded-md font-mono">/upgrade</code> לבוט הטלגרם שלנו
                 כדי לקבל חשבונית תשלום ישירות בטלגרם
               </p>
             </div>
@@ -118,7 +118,7 @@ export default async function CheckoutPage() {
                 rel="noopener noreferrer"
                 className={cn(
                   buttonVariants(),
-                  "w-full rounded-xl btn-gradient shadow-lg shadow-primary/20"
+                  "w-full rounded-xl shadow-md"
                 )}
               >
                 <MessageCircle className="h-4 w-4 me-2" />
