@@ -57,16 +57,18 @@ export async function addCategory(name: string) {
   const trimmed = name.trim();
   if (!trimmed) return { error: "שם הקטגוריה לא יכול להיות ריק" };
 
-  const { data: existing } = await supabase
+  const { data: lastRow } = await supabase
     .from("user_categories")
-    .select("id, display_order")
+    .select("display_order")
     .eq("user_id", user.id)
     .order("display_order", { ascending: false })
-    .limit(1);
+    .limit(1)
+    .maybeSingle();
 
-  const nextOrder = existing && existing.length > 0
-    ? (existing[0] as { id: string; display_order: number }).display_order + 1
-    : 0;
+  const nextOrder =
+    lastRow != null && typeof lastRow.display_order === "number"
+      ? lastRow.display_order + 1
+      : 0;
 
   const { error } = await supabase.from("user_categories").insert({
     user_id: user.id,
