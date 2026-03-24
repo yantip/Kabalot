@@ -22,7 +22,7 @@ export async function login(formData: FormData) {
     return { error: "אימייל או סיסמה שגויים" };
   }
 
-  redirect("/");
+  redirect("/dashboard");
 }
 
 export async function signup(formData: FormData) {
@@ -55,7 +55,7 @@ export async function signup(formData: FormData) {
     return { error: "שגיאה בהרשמה. נסה שוב." };
   }
 
-  redirect("/");
+  redirect("/dashboard");
 }
 
 export async function signOut() {

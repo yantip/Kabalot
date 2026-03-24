@@ -20,7 +20,7 @@ export function Footer() {
               alt="קבלות"
               width={80}
               height={28}
-              className="h-6 w-auto opacity-70"
+              className="h-6 w-auto"
             />
           </div>
 

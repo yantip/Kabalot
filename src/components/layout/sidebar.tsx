@@ -15,7 +15,7 @@ import { signOut } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
-  { href: "/", label: "לוח בקרה", icon: LayoutDashboard },
+  { href: "/dashboard", label: "לוח בקרה", icon: LayoutDashboard },
   { href: "/projects", label: "פרויקטים", icon: FolderOpen },
   { href: "/billing", label: "תוכנית", icon: CreditCard },
   { href: "/settings", label: "הגדרות", icon: Settings },
@@ -29,7 +29,7 @@ export function Navbar() {
       {/* Desktop / tablet top nav */}
       <nav className="sticky top-0 z-40 w-full bg-nav shadow-lg shadow-black/10">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-2.5 group">
+          <Link href="/dashboard" className="flex items-center gap-2.5 group">
             <Image
               src="/imgs/Kabalot-logo.png"
               alt="קבלות"
@@ -43,8 +43,8 @@ export function Navbar() {
           <div className="hidden sm:flex items-center gap-1 rounded-xl bg-white/[0.08] p-1">
             {navItems.map((item) => {
               const isActive =
-                item.href === "/"
-                  ? pathname === "/"
+                item.href === "/dashboard"
+                  ? pathname === "/dashboard"
                   : pathname.startsWith(item.href);
               return (
                 <Link
@@ -83,8 +83,8 @@ export function Navbar() {
         <nav className="flex items-center justify-around bg-nav/95 backdrop-blur-xl px-2 pb-[env(safe-area-inset-bottom)] pt-1 shadow-[0_-1px_12px_rgba(0,0,0,0.15)]">
           {navItems.map((item) => {
             const isActive =
-              item.href === "/"
-                ? pathname === "/"
+              item.href === "/dashboard"
+                ? pathname === "/dashboard"
                 : pathname.startsWith(item.href);
             return (
               <Link
