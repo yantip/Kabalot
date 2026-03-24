@@ -11,7 +11,7 @@ function ArrowHead({ x, y }: { x: number; y: number }) {
   return (
     <g transform={`translate(${x} ${y})`}>
       <path
-        d="M 0 0 L 9 -5.5 L 9 5.5 Z"
+        d="M 0 0 L 8 -4.5 L 8 4.5 Z"
         fill="currentColor"
         fillOpacity={0.88}
       />
@@ -19,7 +19,7 @@ function ArrowHead({ x, y }: { x: number; y: number }) {
   );
 }
 
-/** Desktop: whimsical dashed path between steps (RTL: flows left toward next card). */
+/** Desktop: compact dashed path between steps (RTL: right → left). */
 export function FlowConnectorBetween({
   variant,
   className,
@@ -27,16 +27,16 @@ export function FlowConnectorBetween({
   variant: Variant;
   className?: string;
 }) {
-  // Path runs right → left (RTL: from step N toward step N+1)
+  // Shorter horizontal span (narrower gap = wider cards)
   const paths: Record<Variant, { d: string; arrow: { x: number; y: number } }> =
     {
       loop: {
-        d: "M 208 46 C 188 46 178 46 168 40 C 156 32 148 32 142 42 C 136 52 128 48 118 46 C 98 46 88 18 78 46 C 68 72 52 46 38 46 C 28 46 22 46 14 46",
-        arrow: { x: 14, y: 46 },
+        d: "M 118 40 C 102 40 96 34 88 40 C 80 46 72 40 64 40 C 54 40 48 26 42 40 C 36 54 28 40 20 40 L 14 40",
+        arrow: { x: 14, y: 40 },
       },
       wave: {
-        d: "M 206 44 C 172 44 158 72 132 46 C 106 20 88 72 62 46 C 44 28 28 44 16 44",
-        arrow: { x: 16, y: 44 },
+        d: "M 116 40 C 96 40 84 52 72 40 C 60 28 48 40 28 40 L 18 40",
+        arrow: { x: 18, y: 40 },
       },
     };
 
@@ -51,14 +51,14 @@ export function FlowConnectorBetween({
       aria-hidden
     >
       <svg
-        viewBox="0 0 220 92"
-        className="h-[5.5rem] w-[min(100%,13rem)] sm:w-[15rem] md:w-[17rem] text-primary overflow-visible"
+        viewBox="0 0 128 72"
+        className="h-14 w-[7rem] max-w-[7.5rem] sm:w-[7.75rem] text-primary overflow-visible"
         fill="none"
       >
         <path
           d={d}
           stroke="currentColor"
-          strokeWidth="2.15"
+          strokeWidth="2.1"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeDasharray={dash}
@@ -72,7 +72,7 @@ export function FlowConnectorBetween({
   );
 }
 
-/** Mobile: wavy vertical dashed connector (top → bottom). */
+/** Mobile: compact vertical wavy connector. */
 export function FlowConnectorVertical({ className }: { className?: string }) {
   return (
     <div
@@ -83,14 +83,14 @@ export function FlowConnectorVertical({ className }: { className?: string }) {
       aria-hidden
     >
       <svg
-        viewBox="0 0 48 120"
-        className="h-28 w-12 text-primary overflow-visible"
+        viewBox="0 0 40 96"
+        className="h-24 w-10 text-primary overflow-visible"
         fill="none"
       >
         <path
-          d="M 24 8 C 24 32 38 48 24 60 C 10 72 24 88 24 112"
+          d="M 20 6 C 20 28 32 40 20 50 C 8 60 20 72 20 92"
           stroke="currentColor"
-          strokeWidth="2.15"
+          strokeWidth="2.1"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeDasharray={dash}
@@ -99,7 +99,7 @@ export function FlowConnectorVertical({ className }: { className?: string }) {
           className="flow-connector-hand"
         />
         <path
-          d="M 24 112 l -4 -10 h 8 z"
+          d="M 20 92 l -3.5 -9 h 7 z"
           fill="currentColor"
           fillOpacity={0.85}
         />
