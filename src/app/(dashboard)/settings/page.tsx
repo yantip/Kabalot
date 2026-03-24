@@ -23,7 +23,7 @@ export default async function SettingsPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect("/login");
+  if (!user) redirect("/?auth=login");
 
   const [{ data: profile }, subscription, usage, categories] = await Promise.all([
     supabase.from("profiles").select("*").eq("id", user.id).single(),

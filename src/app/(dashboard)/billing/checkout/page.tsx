@@ -27,7 +27,7 @@ export default async function CheckoutPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect("/login");
+  if (!user) redirect("/?auth=login");
 
   const subscription = await getUserSubscription();
   if (subscription.plan_id === "pro") redirect("/billing/manage");

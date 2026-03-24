@@ -35,7 +35,7 @@ export function Navbar() {
               alt="קבלות"
               width={90}
               height={32}
-              className="h-7 w-auto brightness-0 invert transition-opacity duration-200 group-hover:opacity-80"
+              className="h-7 w-auto transition-opacity duration-200 group-hover:opacity-80"
               priority
             />
           </Link>

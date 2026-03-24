@@ -1,6 +1,8 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Footer } from "@/components/layout/footer";
+import { AuthDialog } from "@/components/auth/auth-dialog";
 import {
   Send,
   Cpu,
@@ -24,19 +26,21 @@ export default function LandingPage() {
               alt="קבלות"
               width={90}
               height={32}
-              className="h-7 w-auto brightness-0 invert"
+              className="h-7 w-auto"
               priority
             />
           </Link>
           <div className="flex items-center gap-3">
             <Link
-              href="/login"
+              href="/?auth=login"
+              scroll={false}
               className="text-sm font-medium text-nav-foreground/70 hover:text-nav-foreground transition-colors px-3 py-2"
             >
               התחברות
             </Link>
             <Link
-              href="/signup"
+              href="/?auth=signup"
+              scroll={false}
               className="text-sm font-bold bg-primary text-primary-foreground rounded-lg px-4 py-2 shadow-sm hover:bg-primary/90 transition-colors"
             >
               הרשמה חינם
@@ -72,7 +76,8 @@ export default function LandingPage() {
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/signup"
+              href="/?auth=signup"
+              scroll={false}
               className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-bold text-base rounded-xl px-8 py-3.5 shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30"
             >
               התחל בחינם
@@ -103,7 +108,6 @@ export default function LandingPage() {
           </div>
 
           <div className="grid gap-8 sm:gap-6 lg:grid-cols-3">
-            {/* Step 1 */}
             <div className="relative surface surface-hover p-8 text-center group">
               <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
                 1
@@ -128,7 +132,6 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Step 2 */}
             <div className="relative surface surface-hover p-8 text-center group">
               <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
                 2
@@ -156,7 +159,6 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Step 3 */}
             <div className="relative surface surface-hover p-8 text-center group">
               <div className="absolute -top-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold shadow-md">
                 3
@@ -240,7 +242,6 @@ export default function LandingPage() {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 max-w-2xl mx-auto">
-            {/* Free */}
             <div className="surface p-8 space-y-6">
               <div>
                 <h3 className="text-lg font-bold">חינמי</h3>
@@ -258,14 +259,14 @@ export default function LandingPage() {
                 ))}
               </ul>
               <Link
-                href="/signup"
+                href="/?auth=signup"
+                scroll={false}
                 className="block w-full text-center bg-muted text-foreground font-bold text-sm rounded-xl px-4 py-3 hover:bg-muted/80 transition-colors"
               >
                 התחל בחינם
               </Link>
             </div>
 
-            {/* Pro */}
             <div className="relative surface ring-2 ring-primary/30 p-8 space-y-6">
               <div className="absolute -top-3 right-6 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full shadow-md">
                 מומלץ
@@ -286,7 +287,8 @@ export default function LandingPage() {
                 ))}
               </ul>
               <Link
-                href="/signup"
+                href="/?auth=signup"
+                scroll={false}
                 className="block w-full text-center bg-primary text-primary-foreground font-bold text-sm rounded-xl px-4 py-3 shadow-md hover:bg-primary/90 transition-colors"
               >
                 התחל עכשיו
@@ -309,7 +311,8 @@ export default function LandingPage() {
             </p>
             <div className="mt-8">
               <Link
-                href="/signup"
+                href="/?auth=signup"
+                scroll={false}
                 className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-bold text-base rounded-xl px-8 py-3.5 shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all duration-200"
               >
                 הרשמה חינם
@@ -321,6 +324,10 @@ export default function LandingPage() {
       </section>
 
       <Footer />
+
+      <Suspense>
+        <AuthDialog />
+      </Suspense>
     </div>
   );
 }

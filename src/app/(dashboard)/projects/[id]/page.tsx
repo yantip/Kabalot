@@ -20,7 +20,7 @@ export default async function ProjectDetailPage({ params }: Props) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect("/login");
+  if (!user) redirect("/?auth=login");
 
   const [{ data: project }, { data: fieldSettings }, { data: receipts }] =
     await Promise.all([
