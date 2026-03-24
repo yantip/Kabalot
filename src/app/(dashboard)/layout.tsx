@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Navbar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function HeaderFallback() {
@@ -27,6 +28,9 @@ export default function DashboardLayout({
           {children}
         </div>
       </main>
+      <div className="hidden sm:block">
+        <Footer />
+      </div>
     </div>
   );
 }
