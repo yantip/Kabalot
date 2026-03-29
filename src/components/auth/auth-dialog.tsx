@@ -24,8 +24,11 @@ export function AuthDialog() {
   const [verifyEmail, setVerifyEmail] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState<AuthSubmitting>(null);
+  /** Until URL `auth` matches, tab switch is in progress (router.replace is async). */
+  const [tabSwitchTarget, setTabSwitchTarget] = useState<AuthTab | null>(null);
 
   const isOpen = authParam === "login" || authParam === "signup";
+  const tabBarBusy = submitting !== null || tabSwitchTarget !== null;
 
   useEffect(() => {
     if (authParam === "login" || authParam === "signup") {
@@ -40,10 +43,17 @@ export function AuthDialog() {
   }, [authParam]);
 
   useEffect(() => {
+    if (tabSwitchTarget && authParam === tabSwitchTarget) {
+      setTabSwitchTarget(null);
+    }
+  }, [authParam, tabSwitchTarget]);
+
+  useEffect(() => {
     if (!isOpen) {
       setSignupStep("form");
       setVerifyEmail(null);
       setSubmitting(null);
+      setTabSwitchTarget(null);
     }
   }, [isOpen]);
 
@@ -96,17 +106,29 @@ export function AuthDialog() {
   }
 
   function switchTab(newTab: AuthTab) {
-    if (submitting) return;
-    setTab(newTab);
+    if (submitting || tabSwitchTarget) return;
     setError(null);
     if (newTab === "login") {
       setSignupStep("form");
       setVerifyEmail(null);
     }
+    if (newTab === authParam) {
+      setTab(newTab);
+      return;
+    }
+    setTabSwitchTarget(newTab);
+    setTab(newTab);
     router.replace(`/?auth=${newTab}`, { scroll: false });
   }
 
   if (!isOpen) return null;
+
+  const signupTabSpinner =
+    submitting === "signup" ||
+    (tab === "signup" && tabSwitchTarget === "signup");
+  const loginTabSpinner =
+    submitting === "login" ||
+    (tab === "login" && tabSwitchTarget === "login");
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -136,31 +158,53 @@ export function AuthDialog() {
             </div>
 
             {!(tab === "signup" && signupStep === "verify") && (
-              <div className="flex items-center rounded-xl bg-muted p-1 gap-1">
+              <div
+                className={cn(
+                  "flex items-center rounded-xl bg-muted p-1 gap-1 transition-colors",
+                  tabBarBusy && "pointer-events-none opacity-55 saturate-0"
+                )}
+                aria-busy={tabBarBusy}
+              >
                 <button
                   type="button"
-                  disabled={!!submitting}
+                  disabled={tabBarBusy}
                   onClick={() => switchTab("signup")}
                   className={cn(
-                    "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200 disabled:opacity-50",
-                    tab === "signup"
+                    "flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 min-h-10 text-sm font-medium transition-all duration-200",
+                    "disabled:cursor-not-allowed",
+                    tab === "signup" && !tabBarBusy
                       ? "bg-card text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
+                      : "text-muted-foreground",
+                    tab === "signup" && !tabBarBusy && "hover:text-foreground"
                   )}
                 >
+                  {signupTabSpinner && (
+                    <Loader2
+                      className="h-3.5 w-3.5 shrink-0 animate-spin text-muted-foreground"
+                      aria-hidden
+                    />
+                  )}
                   הרשמה
                 </button>
                 <button
                   type="button"
-                  disabled={!!submitting}
+                  disabled={tabBarBusy}
                   onClick={() => switchTab("login")}
                   className={cn(
-                    "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200 disabled:opacity-50",
-                    tab === "login"
+                    "flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 min-h-10 text-sm font-medium transition-all duration-200",
+                    "disabled:cursor-not-allowed",
+                    tab === "login" && !tabBarBusy
                       ? "bg-card text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
+                      : "text-muted-foreground",
+                    tab === "login" && !tabBarBusy && "hover:text-foreground"
                   )}
                 >
+                  {loginTabSpinner && (
+                    <Loader2
+                      className="h-3.5 w-3.5 shrink-0 animate-spin text-muted-foreground"
+                      aria-hidden
+                    />
+                  )}
                   התחברות
                 </button>
               </div>
