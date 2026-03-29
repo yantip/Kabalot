@@ -1,8 +1,31 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import type { AuthError } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { loginSchema, signupSchema } from "@/lib/validators/schemas";
+
+const EMAIL_ALREADY_REGISTERED_HE =
+  "האימייל הזה כבר קיים במערכת";
+
+function isEmailAlreadyRegisteredError(error: AuthError): boolean {
+  const code = error.code;
+  if (
+    code === "email_exists" ||
+    code === "user_already_exists" ||
+    code === "identity_already_exists"
+  ) {
+    return true;
+  }
+  const m = error.message.toLowerCase();
+  return (
+    m.includes("already registered") ||
+    m.includes("user already exists") ||
+    m.includes("email address is already") ||
+    m.includes("email already") ||
+    m.includes("already been registered")
+  );
+}
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
@@ -49,8 +72,8 @@ export async function signup(formData: FormData) {
   });
 
   if (error) {
-    if (error.message.includes("already registered")) {
-      return { error: "כתובת האימייל כבר רשומה במערכת" };
+    if (isEmailAlreadyRegisteredError(error)) {
+      return { error: EMAIL_ALREADY_REGISTERED_HE };
     }
     return { error: "שגיאה בהרשמה. נסה שוב." };
   }

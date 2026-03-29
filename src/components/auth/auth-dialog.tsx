@@ -7,11 +7,12 @@ import { login, signup } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, X } from "lucide-react";
+import { Loader2, Mail, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type AuthTab = "login" | "signup";
 type SignupStep = "form" | "verify";
+type AuthSubmitting = "login" | "signup" | null;
 
 export function AuthDialog() {
   const router = useRouter();
@@ -22,7 +23,7 @@ export function AuthDialog() {
   const [signupStep, setSignupStep] = useState<SignupStep>("form");
   const [verifyEmail, setVerifyEmail] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState<AuthSubmitting>(null);
 
   const isOpen = authParam === "login" || authParam === "signup";
 
@@ -30,6 +31,7 @@ export function AuthDialog() {
     if (authParam === "login" || authParam === "signup") {
       setTab(authParam);
       setError(null);
+      setSubmitting(null);
       if (authParam === "login") {
         setSignupStep("form");
         setVerifyEmail(null);
@@ -41,6 +43,7 @@ export function AuthDialog() {
     if (!isOpen) {
       setSignupStep("form");
       setVerifyEmail(null);
+      setSubmitting(null);
     }
   }, [isOpen]);
 
@@ -67,32 +70,33 @@ export function AuthDialog() {
   }, [isOpen, close]);
 
   async function handleLogin(formData: FormData) {
-    setLoading(true);
+    setSubmitting("login");
     setError(null);
     const result = await login(formData);
     if (result?.error) {
       setError(result.error);
-      setLoading(false);
+      setSubmitting(null);
     }
   }
 
   async function handleSignup(formData: FormData) {
-    setLoading(true);
+    setSubmitting("signup");
     setError(null);
     const result = await signup(formData);
     if (result?.error) {
       setError(result.error);
-      setLoading(false);
+      setSubmitting(null);
       return;
     }
     if (result && "verifyEmail" in result && result.verifyEmail) {
       setVerifyEmail(result.email);
       setSignupStep("verify");
     }
-    setLoading(false);
+    setSubmitting(null);
   }
 
   function switchTab(newTab: AuthTab) {
+    if (submitting) return;
     setTab(newTab);
     setError(null);
     if (newTab === "login") {
@@ -135,9 +139,10 @@ export function AuthDialog() {
               <div className="flex items-center rounded-xl bg-muted p-1 gap-1">
                 <button
                   type="button"
+                  disabled={!!submitting}
                   onClick={() => switchTab("signup")}
                   className={cn(
-                    "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200",
+                    "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200 disabled:opacity-50",
                     tab === "signup"
                       ? "bg-card text-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
@@ -147,9 +152,10 @@ export function AuthDialog() {
                 </button>
                 <button
                   type="button"
+                  disabled={!!submitting}
                   onClick={() => switchTab("login")}
                   className={cn(
-                    "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200",
+                    "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200 disabled:opacity-50",
                     tab === "login"
                       ? "bg-card text-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
@@ -196,10 +202,13 @@ export function AuthDialog() {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full h-12 text-sm font-bold rounded-xl shadow-md"
-                  disabled={loading}
+                  className="w-full h-12 text-sm font-bold rounded-xl shadow-md gap-2"
+                  disabled={submitting === "login"}
                 >
-                  {loading ? "מתחבר..." : "התחבר"}
+                  {submitting === "login" && (
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                  )}
+                  {submitting === "login" ? "מתחבר..." : "התחבר"}
                 </Button>
               </form>
             ) : signupStep === "verify" ? (
@@ -285,10 +294,13 @@ export function AuthDialog() {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full h-12 text-sm font-bold rounded-xl shadow-md"
-                  disabled={loading}
+                  className="w-full h-12 text-sm font-bold rounded-xl shadow-md gap-2"
+                  disabled={submitting === "signup"}
                 >
-                  {loading ? "נרשם..." : "צור חשבון"}
+                  {submitting === "signup" && (
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                  )}
+                  {submitting === "signup" ? "נרשם..." : "צור חשבון"}
                 </Button>
               </form>
             )}
