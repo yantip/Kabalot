@@ -7,10 +7,11 @@ import { login, signup } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { X } from "lucide-react";
+import { Mail, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type AuthTab = "login" | "signup";
+type SignupStep = "form" | "verify";
 
 export function AuthDialog() {
   const router = useRouter();
@@ -18,6 +19,8 @@ export function AuthDialog() {
   const authParam = searchParams.get("auth") as AuthTab | null;
 
   const [tab, setTab] = useState<AuthTab>(authParam === "login" ? "login" : "signup");
+  const [signupStep, setSignupStep] = useState<SignupStep>("form");
+  const [verifyEmail, setVerifyEmail] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -27,8 +30,19 @@ export function AuthDialog() {
     if (authParam === "login" || authParam === "signup") {
       setTab(authParam);
       setError(null);
+      if (authParam === "login") {
+        setSignupStep("form");
+        setVerifyEmail(null);
+      }
     }
   }, [authParam]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSignupStep("form");
+      setVerifyEmail(null);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -69,12 +83,22 @@ export function AuthDialog() {
     if (result?.error) {
       setError(result.error);
       setLoading(false);
+      return;
     }
+    if (result && "verifyEmail" in result && result.verifyEmail) {
+      setVerifyEmail(result.email);
+      setSignupStep("verify");
+    }
+    setLoading(false);
   }
 
   function switchTab(newTab: AuthTab) {
     setTab(newTab);
     setError(null);
+    if (newTab === "login") {
+      setSignupStep("form");
+      setVerifyEmail(null);
+    }
     router.replace(`/?auth=${newTab}`, { scroll: false });
   }
 
@@ -107,30 +131,34 @@ export function AuthDialog() {
               />
             </div>
 
-            <div className="flex items-center rounded-xl bg-muted p-1 gap-1">
-              <button
-                onClick={() => switchTab("signup")}
-                className={cn(
-                  "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200",
-                  tab === "signup"
-                    ? "bg-card text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                הרשמה
-              </button>
-              <button
-                onClick={() => switchTab("login")}
-                className={cn(
-                  "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200",
-                  tab === "login"
-                    ? "bg-card text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                התחברות
-              </button>
-            </div>
+            {!(tab === "signup" && signupStep === "verify") && (
+              <div className="flex items-center rounded-xl bg-muted p-1 gap-1">
+                <button
+                  type="button"
+                  onClick={() => switchTab("signup")}
+                  className={cn(
+                    "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200",
+                    tab === "signup"
+                      ? "bg-card text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  הרשמה
+                </button>
+                <button
+                  type="button"
+                  onClick={() => switchTab("login")}
+                  className={cn(
+                    "flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-200",
+                    tab === "login"
+                      ? "bg-card text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  התחברות
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="px-6 sm:px-8 pt-5 pb-8">
@@ -174,6 +202,50 @@ export function AuthDialog() {
                   {loading ? "מתחבר..." : "התחבר"}
                 </Button>
               </form>
+            ) : signupStep === "verify" ? (
+              <div className="space-y-6 text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <Mail className="h-7 w-7" strokeWidth={1.75} />
+                </div>
+                <div className="space-y-2">
+                  <h2 className="text-lg font-bold text-foreground">
+                    נדרש אימות אימייל
+                  </h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    שלחנו קישור אימות לכתובת שלך. יש ללחוץ על הקישור במייל כדי
+                    להפעיל את החשבון ואז ניתן יהיה להתחבר.
+                  </p>
+                  {verifyEmail && (
+                    <p
+                      className="text-sm font-medium text-foreground pt-1 break-all"
+                      dir="ltr"
+                    >
+                      {verifyEmail}
+                    </p>
+                  )}
+                </div>
+                <div className="flex flex-col gap-2 pt-1">
+                  <Button
+                    type="button"
+                    className="w-full h-12 text-sm font-bold rounded-xl shadow-md"
+                    onClick={() => switchTab("login")}
+                  >
+                    מעבר להתחברות
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full h-11 text-sm rounded-xl text-muted-foreground"
+                    onClick={() => {
+                      setSignupStep("form");
+                      setVerifyEmail(null);
+                      setError(null);
+                    }}
+                  >
+                    חזרה לטופס הרשמה
+                  </Button>
+                </div>
+              </div>
             ) : (
               <form action={handleSignup} className="space-y-4">
                 <div className="space-y-2">

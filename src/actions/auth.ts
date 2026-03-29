@@ -38,7 +38,7 @@ export async function signup(formData: FormData) {
     return { error: parsed.error.issues[0].message };
   }
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
     options: {
@@ -55,7 +55,11 @@ export async function signup(formData: FormData) {
     return { error: "שגיאה בהרשמה. נסה שוב." };
   }
 
-  redirect("/dashboard");
+  if (data.session) {
+    redirect("/dashboard");
+  }
+
+  return { verifyEmail: true as const, email: parsed.data.email };
 }
 
 export async function signOut() {
