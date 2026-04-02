@@ -82,6 +82,11 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
     return;
   }
 
+  if (text === "/optout") {
+    await handleOptoutCommand(chatId);
+    return;
+  }
+
   if (text === "/paysupport") {
     await sendMessage(
       chatId,
@@ -96,7 +101,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
     return;
   }
 
-  await sendMessage(chatId, "שלח לי תמונה של קבלה ואחלץ עבורך את הנתונים.\n\nפקודות נוספות:\n/upgrade - שדרג לתוכנית מקצועית");
+  await sendMessage(chatId, "שלח לי תמונה של קבלה ואחלץ עבורך את הנתונים.\n\nפקודות נוספות:\n/upgrade - שדרג לתוכנית מקצועית\n/optout - נתק את החשבון מהבוט");
 }
 
 async function handlePreCheckout(query: {
@@ -225,6 +230,39 @@ async function handleUpgradeCommand(chatId: number) {
     currency: "XTR",
     prices: [{ label: "מנוי חודשי", amount: PLANS.pro.starPrice }],
   });
+}
+
+async function handleOptoutCommand(chatId: number) {
+  const supabase = createServiceClient();
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("telegram_chat_id", chatId)
+    .single();
+
+  if (!profile) {
+    await sendMessage(chatId, "החשבון שלך לא מחובר כרגע.");
+    return;
+  }
+
+  // Clear telegram_chat_id from profile
+  await supabase
+    .from("profiles")
+    .update({ telegram_chat_id: null, pending_telegram_file_id: null })
+    .eq("id", profile.id);
+
+  // Revoke active bot connections
+  await supabase
+    .from("bot_connections")
+    .update({ status: "revoked" })
+    .eq("user_id", profile.id)
+    .eq("status", "active");
+
+  await sendMessage(
+    chatId,
+    "✅ החשבון נותק בהצלחה.\n\nלא תקבל/י יותר הודעות מהבוט.\nאם תרצה/י להתחבר שוב, היכנס/י לאפליקציה ולחץ/י על 'חבר טלגרם' בהגדרות."
+  );
 }
 
 async function sendUpgradePrompt(chatId: number, usage: number, limit: number) {

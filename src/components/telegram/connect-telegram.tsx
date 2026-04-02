@@ -61,10 +61,24 @@ export function ConnectTelegram({ isConnected }: ConnectTelegramProps) {
           <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
             שלח תמונת קבלה לבוט בטלגרם והנתונים יחולצו אוטומטית.
           </p>
-          <Button variant="outline" onClick={handleDisconnect} className="gap-1.5 rounded-xl">
-            <Unplug className="h-4 w-4" />
-            נתק טלגרם
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" onClick={handleDisconnect} className="gap-1.5 rounded-xl">
+              <Unplug className="h-4 w-4" />
+              נתק טלגרם
+            </Button>
+            <a
+              href={`https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-input bg-background px-4 py-2 text-sm font-medium text-muted-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+            >
+              <ExternalLink className="h-4 w-4" />
+              שלח /optout בטלגרם
+            </a>
+          </div>
+          <p className="text-xs text-muted-foreground/60 mt-3">
+            שלח <span className="font-mono">/optout</span> לבוט בטלגרם כדי לנתק את החשבון מצד הבוט.
+          </p>
         </CardContent>
       </Card>
     );
