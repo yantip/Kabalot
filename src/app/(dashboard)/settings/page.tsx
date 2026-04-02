@@ -70,6 +70,8 @@ export default async function SettingsPage() {
         </CardContent>
       </Card>
 
+      <ConnectTelegram isConnected={isConnected} />
+
       <Card className="border-0 surface rounded-2xl">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
@@ -129,8 +131,6 @@ export default async function SettingsPage() {
       </Card>
 
       <ManageCategories categories={categories} />
-
-      <ConnectTelegram isConnected={isConnected} />
     </div>
   );
 }

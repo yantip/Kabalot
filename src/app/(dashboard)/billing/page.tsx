@@ -22,10 +22,17 @@ export default async function BillingPage() {
 
   if (!user) redirect("/?auth=login");
 
-  const [subscription, usage] = await Promise.all([
+  const [{ data: profile }, subscription, usage] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("telegram_chat_id")
+      .eq("id", user.id)
+      .single(),
     getUserSubscription(),
     getMonthlyUsage(),
   ]);
+
+  if (!profile?.telegram_chat_id) redirect("/onboarding");
 
   const currentPlan = PLANS[subscription.plan_id as keyof typeof PLANS] ?? PLANS.free;
   const usagePercent = Math.min((usage / currentPlan.receiptsPerMonth) * 100, 100);

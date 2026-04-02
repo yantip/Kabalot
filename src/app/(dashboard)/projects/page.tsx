@@ -14,7 +14,12 @@ export default async function ProjectsPage() {
 
   if (!user) redirect("/?auth=login");
 
-  const [{ data: projects }, { data: receiptRows }] = await Promise.all([
+  const [{ data: profile }, { data: projects }, { data: receiptRows }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("telegram_chat_id")
+      .eq("id", user.id)
+      .single(),
     supabase
       .from("projects")
       .select("*")
@@ -25,6 +30,8 @@ export default async function ProjectsPage() {
       .select("project_id")
       .eq("user_id", user.id),
   ]);
+
+  if (!profile?.telegram_chat_id) redirect("/onboarding");
 
   const countsByProject = new Map<string, number>();
   (receiptRows ?? []).forEach((r) => {

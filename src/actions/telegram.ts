@@ -69,3 +69,20 @@ export async function disconnectTelegram() {
   revalidatePath("/settings");
   return { success: true };
 }
+
+export async function checkTelegramConnection() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return { connected: false };
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("telegram_chat_id")
+    .eq("id", user.id)
+    .single();
+
+  return { connected: !!profile?.telegram_chat_id };
+}

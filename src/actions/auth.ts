@@ -57,8 +57,11 @@ export async function signup(formData: FormData) {
   });
 
   if (!parsed.success) {
+    console.log("[SIGNUP] Validation failed:", parsed.error.issues[0].message);
     return { error: parsed.error.issues[0].message };
   }
+
+  console.log("[SIGNUP] Attempting signUp for:", parsed.data.email);
 
   const result = await supabase.auth.signUp({
     email: parsed.data.email,
@@ -70,16 +73,43 @@ export async function signup(formData: FormData) {
     },
   });
 
+  console.log("[SIGNUP] Supabase response:", {
+    error: result.error
+      ? {
+          message: result.error.message,
+          code: result.error.code,
+          status: result.error.status,
+          name: result.error.name,
+        }
+      : null,
+    hasUser: !!result.data?.user,
+    userId: result.data?.user?.id ?? null,
+    hasSession: !!result.data?.session,
+    identities: result.data?.user?.identities?.length ?? "N/A",
+    confirmationSentAt: result.data?.user?.confirmation_sent_at ?? null,
+  });
+
   if (result.error) {
     if (isEmailAlreadyRegisteredError(result.error)) {
+      console.log("[SIGNUP] → Email already registered");
       return { error: EMAIL_ALREADY_REGISTERED_HE };
+    }
+    // Rate limit on confirmation emails
+    if (
+      result.error.status === 429 ||
+      result.error.code === "over_email_send_rate_limit"
+    ) {
+      console.log("[SIGNUP] → Rate limited by Supabase");
+      return { error: "יותר מדי ניסיונות. נסה שוב בעוד מספר דקות." };
     }
     // If user was actually created despite the error (transient issue),
     // still show the verify screen instead of a confusing error.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((result as any).data?.user?.id) {
+      console.log("[SIGNUP] → Error but user exists, showing verify screen");
       return { verifyEmail: true as const, email: parsed.data.email };
     }
+    console.log("[SIGNUP] → Generic error, returning שגיאה בהרשמה");
     return { error: "שגיאה בהרשמה. נסה שוב." };
   }
 
@@ -92,13 +122,16 @@ export async function signup(formData: FormData) {
     data.user &&
     (!data.user.identities || data.user.identities.length === 0)
   ) {
+    console.log("[SIGNUP] → Empty identities, email already registered");
     return { error: EMAIL_ALREADY_REGISTERED_HE };
   }
 
   if (data.session) {
+    console.log("[SIGNUP] → Session exists, redirecting to dashboard");
     return { success: true as const };
   }
 
+  console.log("[SIGNUP] → Success, email verification required");
   return { verifyEmail: true as const, email: parsed.data.email };
 }
 

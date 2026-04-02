@@ -60,6 +60,9 @@ export default async function DashboardPage() {
 
   const isConnected = !!profile?.telegram_chat_id;
 
+  // Must connect Telegram before using the dashboard
+  if (!isConnected) redirect("/onboarding");
+
   const currentPlan = PLANS[subscription.plan_id as keyof typeof PLANS] ?? PLANS.free;
   const usagePercent = Math.min((monthlyUsage / currentPlan.receiptsPerMonth) * 100, 100);
   const isNearLimit = usagePercent >= 80 && subscription.plan_id === "free";
@@ -97,26 +100,6 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      {!isConnected && (
-        <div className="animate-slide-up surface p-5 sm:p-6">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
-              <MessageCircle className="h-5.5 w-5.5 text-primary" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-bold text-foreground text-base">חבר את הטלגרם שלך</p>
-              <p className="text-sm text-muted-foreground mt-0.5 leading-relaxed">
-                שלח תמונות של קבלות ישירות מטלגרם והנתונים יחולצו אוטומטית
-              </p>
-            </div>
-            <Link href="/settings" className={cn(buttonVariants({ variant: "outline", size: "sm" }), "shrink-0 gap-2 rounded-xl")}>
-              הגדרות
-              <ArrowLeft className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-        </div>
-      )}
-
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, i) => (
           <Card
