@@ -90,9 +90,12 @@ export function AuthDialog() {
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen, close]);
 
-  async function handleLogin(formData: FormData) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (submitting) return;
     setSubmitting("login");
     setError(null);
+    const formData = new FormData(e.currentTarget);
     const result = await login(formData);
     if (result?.error) {
       setError(result.error);
@@ -100,9 +103,12 @@ export function AuthDialog() {
     }
   }
 
-  async function handleSignup(formData: FormData) {
+  async function handleSignup(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (submitting) return;
     setSubmitting("signup");
     setError(null);
+    const formData = new FormData(e.currentTarget);
     const result = await signup(formData);
     if (result?.error) {
       setError(result.error);
@@ -254,7 +260,7 @@ export function AuthDialog() {
           <div className="px-6 sm:px-8 pt-5 pb-8">
 
             {tab === "login" ? (
-              <form action={handleLogin} className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-4">
                 {error && (
                   <div className="rounded-xl bg-destructive/10 border border-destructive/20 p-3.5 text-sm text-destructive">
                     {error}
@@ -328,7 +334,7 @@ export function AuthDialog() {
                 </p>
               </div>
             ) : (
-              <form action={handleSignup} className="space-y-4">
+              <form onSubmit={handleSignup} className="space-y-4">
                 {error && (
                   <div className="rounded-xl bg-destructive/10 border border-destructive/20 p-3.5 text-sm text-destructive">
                     {error}

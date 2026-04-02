@@ -38,6 +38,16 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
+  // If Supabase sends an auth code to the root, forward it to /auth/callback
+  const code = request.nextUrl.searchParams.get("code");
+  if (pathname === "/" && code) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth/callback";
+    // Keep the code param, strip everything else
+    url.search = `?code=${encodeURIComponent(code)}`;
+    return NextResponse.redirect(url);
+  }
+
   /** Routes that anonymous users may view (marketing, legal, auth modal entry). */
   const isPublicPath =
     pathname === "/" ||
