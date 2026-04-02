@@ -46,7 +46,9 @@ export async function updateSession(request: NextRequest) {
     pathname === "/refund";
 
   const isAuthPage =
-    pathname.startsWith("/login") || pathname.startsWith("/signup");
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/signup") ||
+    pathname.startsWith("/auth/callback");
 
   if (!user && !isAuthPage && !isPublicPath) {
     const url = request.nextUrl.clone();

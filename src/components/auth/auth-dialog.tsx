@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { login, signup } from "@/actions/auth";
@@ -14,6 +14,9 @@ type AuthTab = "login" | "signup";
 type SignupStep = "form" | "verify";
 type AuthSubmitting = "login" | "signup" | null;
 
+/** Tab switch often completes in one frame; keep bar visibly busy at least this long. */
+const MIN_TAB_SWITCH_MS = 240;
+
 export function AuthDialog() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -26,6 +29,7 @@ export function AuthDialog() {
   const [submitting, setSubmitting] = useState<AuthSubmitting>(null);
   /** Until URL `auth` matches, tab switch is in progress (router.replace is async). */
   const [tabSwitchTarget, setTabSwitchTarget] = useState<AuthTab | null>(null);
+  const tabSwitchStartedAtRef = useRef<number | null>(null);
 
   const isOpen = authParam === "login" || authParam === "signup";
   const tabBarBusy = submitting !== null || tabSwitchTarget !== null;
@@ -43,9 +47,16 @@ export function AuthDialog() {
   }, [authParam]);
 
   useEffect(() => {
-    if (tabSwitchTarget && authParam === tabSwitchTarget) {
+    if (!tabSwitchTarget) return;
+    if (authParam !== tabSwitchTarget) return;
+    const started = tabSwitchStartedAtRef.current ?? Date.now();
+    const elapsed = Date.now() - started;
+    const remaining = Math.max(0, MIN_TAB_SWITCH_MS - elapsed);
+    const id = window.setTimeout(() => {
       setTabSwitchTarget(null);
-    }
+      tabSwitchStartedAtRef.current = null;
+    }, remaining);
+    return () => clearTimeout(id);
   }, [authParam, tabSwitchTarget]);
 
   useEffect(() => {
@@ -114,8 +125,10 @@ export function AuthDialog() {
     }
     if (newTab === authParam) {
       setTab(newTab);
+      tabSwitchStartedAtRef.current = null;
       return;
     }
+    tabSwitchStartedAtRef.current = Date.now();
     setTabSwitchTarget(newTab);
     setTab(newTab);
     router.replace(`/?auth=${newTab}`, { scroll: false });
@@ -158,68 +171,95 @@ export function AuthDialog() {
             </div>
 
             {!(tab === "signup" && signupStep === "verify") && (
-              <div
-                className={cn(
-                  "flex items-center rounded-xl bg-muted p-1 gap-1 transition-colors",
-                  tabBarBusy && "pointer-events-none opacity-55 saturate-0"
+              <div className="relative">
+                <div
+                  className={cn(
+                    "flex items-center rounded-xl bg-muted p-1 gap-1 transition-[opacity,filter] duration-200",
+                    tabBarBusy &&
+                      "pointer-events-none opacity-[0.38] saturate-0 contrast-[0.92] shadow-inner"
+                  )}
+                  aria-busy={tabBarBusy}
+                >
+                  <button
+                    type="button"
+                    tabIndex={tabBarBusy ? -1 : 0}
+                    aria-disabled={tabBarBusy}
+                    disabled={tabBarBusy}
+                    onClick={() => switchTab("signup")}
+                    className={cn(
+                      "flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 min-h-10 text-sm font-medium transition-colors duration-200",
+                      tabBarBusy
+                        ? "cursor-not-allowed bg-transparent text-muted-foreground shadow-none"
+                        : "cursor-pointer",
+                      !tabBarBusy &&
+                        tab === "signup" &&
+                        "bg-card text-foreground shadow-sm",
+                      !tabBarBusy &&
+                        tab !== "signup" &&
+                        "text-muted-foreground hover:text-foreground",
+                      !tabBarBusy && tab === "signup" && "hover:text-foreground"
+                    )}
+                  >
+                    {signupTabSpinner && (
+                      <Loader2
+                        className="h-4 w-4 shrink-0 animate-spin text-foreground/50"
+                        aria-hidden
+                      />
+                    )}
+                    <span className={cn(tabBarBusy && "text-muted-foreground")}>
+                      הרשמה
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    tabIndex={tabBarBusy ? -1 : 0}
+                    aria-disabled={tabBarBusy}
+                    disabled={tabBarBusy}
+                    onClick={() => switchTab("login")}
+                    className={cn(
+                      "flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 min-h-10 text-sm font-medium transition-colors duration-200",
+                      tabBarBusy
+                        ? "cursor-not-allowed bg-transparent text-muted-foreground shadow-none"
+                        : "cursor-pointer",
+                      !tabBarBusy &&
+                        tab === "login" &&
+                        "bg-card text-foreground shadow-sm",
+                      !tabBarBusy &&
+                        tab !== "login" &&
+                        "text-muted-foreground hover:text-foreground",
+                      !tabBarBusy && tab === "login" && "hover:text-foreground"
+                    )}
+                  >
+                    {loginTabSpinner && (
+                      <Loader2
+                        className="h-4 w-4 shrink-0 animate-spin text-foreground/50"
+                        aria-hidden
+                      />
+                    )}
+                    <span className={cn(tabBarBusy && "text-muted-foreground")}>
+                      התחברות
+                    </span>
+                  </button>
+                </div>
+                {tabBarBusy && (
+                  <div
+                    className="absolute inset-0 z-10 cursor-wait rounded-[inherit]"
+                    aria-hidden
+                  />
                 )}
-                aria-busy={tabBarBusy}
-              >
-                <button
-                  type="button"
-                  disabled={tabBarBusy}
-                  onClick={() => switchTab("signup")}
-                  className={cn(
-                    "flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 min-h-10 text-sm font-medium transition-all duration-200",
-                    "disabled:cursor-not-allowed",
-                    tab === "signup" && !tabBarBusy
-                      ? "bg-card text-foreground shadow-sm"
-                      : "text-muted-foreground",
-                    tab === "signup" && !tabBarBusy && "hover:text-foreground"
-                  )}
-                >
-                  {signupTabSpinner && (
-                    <Loader2
-                      className="h-3.5 w-3.5 shrink-0 animate-spin text-muted-foreground"
-                      aria-hidden
-                    />
-                  )}
-                  הרשמה
-                </button>
-                <button
-                  type="button"
-                  disabled={tabBarBusy}
-                  onClick={() => switchTab("login")}
-                  className={cn(
-                    "flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 min-h-10 text-sm font-medium transition-all duration-200",
-                    "disabled:cursor-not-allowed",
-                    tab === "login" && !tabBarBusy
-                      ? "bg-card text-foreground shadow-sm"
-                      : "text-muted-foreground",
-                    tab === "login" && !tabBarBusy && "hover:text-foreground"
-                  )}
-                >
-                  {loginTabSpinner && (
-                    <Loader2
-                      className="h-3.5 w-3.5 shrink-0 animate-spin text-muted-foreground"
-                      aria-hidden
-                    />
-                  )}
-                  התחברות
-                </button>
               </div>
             )}
           </div>
 
           <div className="px-6 sm:px-8 pt-5 pb-8">
-            {error && (
-              <div className="rounded-xl bg-destructive/10 border border-destructive/20 p-3.5 text-sm text-destructive mb-5">
-                {error}
-              </div>
-            )}
 
             {tab === "login" ? (
               <form action={handleLogin} className="space-y-4">
+                {error && (
+                  <div className="rounded-xl bg-destructive/10 border border-destructive/20 p-3.5 text-sm text-destructive">
+                    {error}
+                  </div>
+                )}
                 <div className="space-y-2">
                   <Label htmlFor="login-email">אימייל</Label>
                   <Input
@@ -256,51 +296,44 @@ export function AuthDialog() {
                 </Button>
               </form>
             ) : signupStep === "verify" ? (
-              <div className="space-y-6 text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <Mail className="h-7 w-7" strokeWidth={1.75} />
+              <div className="space-y-6 text-center py-2">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <Mail className="h-8 w-8" strokeWidth={1.75} />
                 </div>
-                <div className="space-y-2">
-                  <h2 className="text-lg font-bold text-foreground">
-                    נדרש אימות אימייל
+                <div className="space-y-3">
+                  <h2 className="text-xl font-bold text-foreground">
+                    בדוק את המייל שלך
                   </h2>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    שלחנו קישור אימות לכתובת שלך. יש ללחוץ על הקישור במייל כדי
-                    להפעיל את החשבון ואז ניתן יהיה להתחבר.
+                    שלחנו קישור אימות לכתובת:
                   </p>
                   {verifyEmail && (
                     <p
-                      className="text-sm font-medium text-foreground pt-1 break-all"
+                      className="text-base font-semibold text-foreground break-all"
                       dir="ltr"
                     >
                       {verifyEmail}
                     </p>
                   )}
+                  <div className="rounded-xl bg-muted/60 border border-border/40 p-4 mt-2">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      לחץ על הקישור במייל כדי להפעיל את החשבון.
+                      <br />
+                      לאחר הלחיצה תתחבר אוטומטית.
+                    </p>
+                  </div>
                 </div>
-                <div className="flex flex-col gap-2 pt-1">
-                  <Button
-                    type="button"
-                    className="w-full h-12 text-sm font-bold rounded-xl shadow-md"
-                    onClick={() => switchTab("login")}
-                  >
-                    מעבר להתחברות
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    className="w-full h-11 text-sm rounded-xl text-muted-foreground"
-                    onClick={() => {
-                      setSignupStep("form");
-                      setVerifyEmail(null);
-                      setError(null);
-                    }}
-                  >
-                    חזרה לטופס הרשמה
-                  </Button>
-                </div>
+                <p className="text-xs text-muted-foreground/60 pt-2">
+                  לא קיבלת? בדוק בתיקיית הספאם.
+                </p>
               </div>
             ) : (
               <form action={handleSignup} className="space-y-4">
+                {error && (
+                  <div className="rounded-xl bg-destructive/10 border border-destructive/20 p-3.5 text-sm text-destructive">
+                    {error}
+                  </div>
+                )}
                 <div className="space-y-2">
                   <Label htmlFor="signup-fullName">שם מלא</Label>
                   <Input

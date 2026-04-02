@@ -61,21 +61,43 @@ export async function signup(formData: FormData) {
     return { error: parsed.error.issues[0].message };
   }
 
-  const { data, error } = await supabase.auth.signUp({
+  const siteUrl =
+    process.env.NEXT_PUBLIC_APP_URL ?? "https://kabalot-mu.vercel.app";
+
+  const result = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
     options: {
       data: {
         full_name: parsed.data.fullName,
       },
+      emailRedirectTo: `${siteUrl}/auth/callback`,
     },
   });
 
-  if (error) {
-    if (isEmailAlreadyRegisteredError(error)) {
+  if (result.error) {
+    if (isEmailAlreadyRegisteredError(result.error)) {
       return { error: EMAIL_ALREADY_REGISTERED_HE };
     }
+    // If user was actually created despite the error (transient issue),
+    // still show the verify screen instead of a confusing error.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((result as any).data?.user?.id) {
+      return { verifyEmail: true as const, email: parsed.data.email };
+    }
     return { error: "שגיאה בהרשמה. נסה שוב." };
+  }
+
+  const { data } = result;
+
+  // Supabase returns data.user with empty identities[] for already-existing
+  // but unconfirmed emails (security feature to prevent email enumeration).
+  // Treat this as "email already registered".
+  if (
+    data.user &&
+    (!data.user.identities || data.user.identities.length === 0)
+  ) {
+    return { error: EMAIL_ALREADY_REGISTERED_HE };
   }
 
   if (data.session) {
