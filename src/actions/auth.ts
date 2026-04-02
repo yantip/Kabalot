@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import type { AuthError } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { loginSchema, signupSchema } from "@/lib/validators/schemas";
@@ -45,7 +44,7 @@ export async function login(formData: FormData) {
     return { error: "אימייל או סיסמה שגויים" };
   }
 
-  redirect("/dashboard");
+  return { success: true as const };
 }
 
 export async function signup(formData: FormData) {
@@ -61,9 +60,6 @@ export async function signup(formData: FormData) {
     return { error: parsed.error.issues[0].message };
   }
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_APP_URL ?? "https://kabalot-mu.vercel.app";
-
   const result = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
@@ -71,7 +67,6 @@ export async function signup(formData: FormData) {
       data: {
         full_name: parsed.data.fullName,
       },
-      emailRedirectTo: `${siteUrl}/auth/callback`,
     },
   });
 
@@ -101,7 +96,7 @@ export async function signup(formData: FormData) {
   }
 
   if (data.session) {
-    redirect("/dashboard");
+    return { success: true as const };
   }
 
   return { verifyEmail: true as const, email: parsed.data.email };
@@ -110,5 +105,5 @@ export async function signup(formData: FormData) {
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/");
+  return { success: true as const };
 }

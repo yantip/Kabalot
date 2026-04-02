@@ -64,7 +64,11 @@ export function Navbar() {
             })}
           </div>
 
-          <form action={signOut}>
+          <form onSubmit={async (e) => {
+            e.preventDefault();
+            await signOut();
+            window.location.href = "/";
+          }}>
             <Button
               variant="ghost"
               size="sm"

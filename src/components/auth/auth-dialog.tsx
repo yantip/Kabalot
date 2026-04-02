@@ -100,6 +100,11 @@ export function AuthDialog() {
     if (result?.error) {
       setError(result.error);
       setSubmitting(null);
+      return;
+    }
+    if ("success" in result) {
+      window.location.href = "/dashboard";
+      return;
     }
   }
 
@@ -115,7 +120,11 @@ export function AuthDialog() {
       setSubmitting(null);
       return;
     }
-    if (result && "verifyEmail" in result && result.verifyEmail) {
+    if ("success" in result) {
+      window.location.href = "/dashboard";
+      return;
+    }
+    if ("verifyEmail" in result && result.verifyEmail) {
       setVerifyEmail(result.email);
       setSignupStep("verify");
     }
