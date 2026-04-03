@@ -4,7 +4,6 @@ export const PLANS = {
     name: "חינמי",
     price: 0,
     currency: "ILS",
-    starPrice: 0,
     receiptsPerMonth: 5,
     projectsLimit: 3,
     features: [
@@ -19,7 +18,6 @@ export const PLANS = {
     name: "מקצועי",
     price: 30,
     currency: "ILS",
-    starPrice: 500,
     receiptsPerMonth: 500,
     projectsLimit: Infinity,
     features: [

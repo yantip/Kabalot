@@ -17,9 +17,9 @@ import {
   ArrowRight,
   Sparkles,
   Check,
-  MessageCircle,
-  Star,
+  Shield,
 } from "lucide-react";
+import { PayPalSubscribeButton } from "@/components/billing/paypal-subscribe-button";
 
 export default async function CheckoutPage() {
   const supabase = await createClient();
@@ -32,15 +32,8 @@ export default async function CheckoutPage() {
   const subscription = await getUserSubscription();
   if (subscription.plan_id === "pro") redirect("/billing/manage");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("telegram_chat_id")
-    .eq("id", user.id)
-    .single();
-
-  const isConnected = !!profile?.telegram_chat_id;
   const plan = PLANS.pro;
-  const botUsername = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || "your_bot";
+  const paypalPlanId = process.env.PAYPAL_PLAN_ID;
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 animate-slide-up">
@@ -57,7 +50,7 @@ export default async function CheckoutPage() {
         <div className="space-y-0.5">
           <h1 className="text-3xl font-bold tracking-tight">שדרוג לתוכנית מקצועית</h1>
           <p className="text-sm text-muted-foreground">
-            תשלום באמצעות Telegram Stars
+            תשלום מאובטח באמצעות PayPal
           </p>
         </div>
       </div>
@@ -83,9 +76,7 @@ export default async function CheckoutPage() {
             <Separator />
             <div className="flex items-baseline justify-between">
               <span className="text-sm font-semibold">סה&quot;כ לחודש</span>
-              <span className="text-2xl font-bold flex items-center gap-1">
-                {plan.starPrice} <Star className="h-5 w-5 text-primary fill-primary" />
-              </span>
+              <span className="text-2xl font-bold">₪{plan.price}</span>
             </div>
           </CardContent>
         </Card>
@@ -93,58 +84,25 @@ export default async function CheckoutPage() {
         <Card className="sm:col-span-3 border-0 surface rounded-2xl">
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2 font-bold">
-              <MessageCircle className="h-4 w-4 text-muted-foreground" />
-              תשלום דרך טלגרם
+              <Shield className="h-4 w-4 text-muted-foreground" />
+              תשלום מאובטח
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-5">
-            <div className="rounded-xl bg-primary/[0.05] ring-1 ring-primary/15 p-5 space-y-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mx-auto">
-                <Star className="h-6 w-6 text-primary" />
-              </div>
-              <p className="text-sm font-semibold text-center">
-                התשלום מתבצע באמצעות Telegram Stars
-              </p>
-              <p className="text-xs text-muted-foreground text-center leading-relaxed">
-                שלח את הפקודה <code className="bg-muted px-1.5 py-0.5 rounded-md font-mono">/upgrade</code> לבוט הטלגרם שלנו
-                כדי לקבל חשבונית תשלום ישירות בטלגרם
-              </p>
-            </div>
-
-            {isConnected ? (
-              <a
-                href={`https://t.me/${botUsername}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  buttonVariants(),
-                  "w-full rounded-xl shadow-md"
-                )}
-              >
-                <MessageCircle className="h-4 w-4 me-2" />
-                פתח את הבוט ושלח /upgrade
-              </a>
+            {paypalPlanId ? (
+              <PayPalSubscribeButton planId={paypalPlanId} />
             ) : (
-              <div className="space-y-3">
-                <p className="text-sm text-muted-foreground text-center">
-                  כדי לשלם, חבר קודם את חשבון הטלגרם שלך
-                </p>
-                <Link
-                  href="/settings"
-                  className={cn(
-                    buttonVariants({ variant: "outline" }),
-                    "w-full rounded-xl"
-                  )}
-                >
-                  חבר טלגרם בהגדרות
-                  <ArrowRight className="h-3.5 w-3.5 ms-2" />
-                </Link>
+              <div className="rounded-xl bg-destructive/10 border border-destructive/20 p-4 text-sm text-destructive text-center">
+                מערכת התשלומים אינה מוגדרת. פנה לתמיכה.
               </div>
             )}
 
-            <p className="text-xs text-muted-foreground text-center">
-              Telegram Stars הוא אמצעי תשלום דיגיטלי מאובטח של טלגרם
-            </p>
+            <div className="flex items-center gap-2 justify-center pt-1">
+              <Shield className="h-3.5 w-3.5 text-muted-foreground/50" />
+              <p className="text-xs text-muted-foreground/60">
+                התשלום מעובד באופן מאובטח על ידי PayPal. ניתן לבטל בכל עת.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
