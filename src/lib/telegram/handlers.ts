@@ -3,8 +3,6 @@ import {
   sendMessage,
   getFileUrl,
   escapeHtml,
-  sendInvoice,
-  answerPreCheckoutQuery as botAnswerPreCheckout,
 } from "./bot";
 import { processReceipt } from "@/lib/extraction/extract-receipt";
 import { checkReceiptLimit } from "@/lib/usage";
@@ -18,20 +16,6 @@ interface TelegramUpdate {
     chat: { id: number };
     text?: string;
     photo?: Array<{ file_id: string; file_size?: number; width: number; height: number }>;
-    successful_payment?: {
-      currency: string;
-      total_amount: number;
-      invoice_payload: string;
-      telegram_payment_charge_id: string;
-      provider_payment_charge_id: string;
-    };
-  };
-  pre_checkout_query?: {
-    id: string;
-    from: { id: number };
-    currency: string;
-    total_amount: number;
-    invoice_payload: string;
   };
   callback_query?: {
     id: string;
@@ -42,11 +26,6 @@ interface TelegramUpdate {
 }
 
 export async function handleTelegramUpdate(update: TelegramUpdate) {
-  if (update.pre_checkout_query) {
-    await handlePreCheckout(update.pre_checkout_query);
-    return;
-  }
-
   if (update.callback_query) {
     await handleCallbackQuery(update.callback_query);
     return;
@@ -56,11 +35,6 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
   if (!message) return;
 
   const chatId = message.chat.id;
-
-  if (message.successful_payment) {
-    await handleSuccessfulPayment(chatId, message.from?.id ?? chatId, message.successful_payment);
-    return;
-  }
 
   const text = message.text?.trim();
 
@@ -106,92 +80,9 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
   await sendMessage(chatId, "שלח לי תמונה של קבלה ואחלץ עבורך את הנתונים.\n\nפקודות נוספות:\n/upgrade - שדרג לתוכנית מקצועית\n/optout - נתק את החשבון מהבוט");
 }
 
-async function handlePreCheckout(query: {
-  id: string;
-  from: { id: number };
-  currency: string;
-  total_amount: number;
-  invoice_payload: string;
-}) {
-  try {
-    const payload = JSON.parse(query.invoice_payload);
-    if (payload.plan !== "pro" || query.currency !== "XTR") {
-      await botAnswerPreCheckout(query.id, false, "תשלום לא תקין");
-      return;
-    }
-    await botAnswerPreCheckout(query.id, true);
-  } catch {
-    await botAnswerPreCheckout(query.id, false, "שגיאה בעיבוד התשלום");
-  }
-}
-
-async function handleSuccessfulPayment(
-  chatId: number,
-  telegramUserId: number,
-  payment: {
-    currency: string;
-    total_amount: number;
-    invoice_payload: string;
-    telegram_payment_charge_id: string;
-  }
-) {
-  const supabase = createServiceClient();
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("telegram_chat_id", chatId)
-    .single();
-
-  if (!profile) {
-    console.error("successful_payment for unknown chat:", chatId);
-    return;
-  }
-
-  let payload: { plan?: string; userId?: string };
-  try {
-    payload = JSON.parse(payment.invoice_payload);
-  } catch {
-    console.error("Failed to parse invoice payload:", payment.invoice_payload);
-    return;
-  }
-
-  await supabase.from("star_payments").insert({
-    user_id: profile.id,
-    telegram_payment_charge_id: payment.telegram_payment_charge_id,
-    telegram_user_id: telegramUserId,
-    amount_stars: payment.total_amount,
-    payload: payload as Record<string, unknown>,
-  });
-
-  const now = new Date();
-  const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-
-  await supabase
-    .from("subscriptions")
-    .update({
-      plan_id: "pro",
-      status: "active",
-      current_period_start: now.toISOString(),
-      current_period_end: periodEnd.toISOString(),
-      payment_provider: "telegram_stars",
-      payment_provider_sub_id: payment.telegram_payment_charge_id,
-    })
-    .eq("user_id", profile.id);
-
-  await sendMessage(
-    chatId,
-    "🎉 <b>שדרוג בוצע בהצלחה!</b>\n\n" +
-    `✨ התוכנית שלך: <b>${PLANS.pro.name}</b>\n` +
-    `📋 ${PLANS.pro.receiptsPerMonth} קבלות בחודש\n` +
-    `📁 פרויקטים ללא הגבלה\n\n` +
-    `התוכנית תקפה עד ${periodEnd.toLocaleDateString("he-IL")}`,
-    { parse_mode: "HTML" }
-  );
-}
-
 async function handleUpgradeCommand(chatId: number) {
   const supabase = createServiceClient();
+  const appUrl = process.env.TELEGRAM_APP_URL || process.env.NEXT_PUBLIC_APP_URL || "https://kabalot.online";
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -200,7 +91,11 @@ async function handleUpgradeCommand(chatId: number) {
     .single();
 
   if (!profile) {
-    await sendMessage(chatId, "החשבון שלך לא מחובר. היכנס לאפליקציה ולחץ על 'חבר טלגרם' בהגדרות.");
+    await sendMessage(
+      chatId,
+      `החשבון שלך לא מחובר. <a href="${appUrl}">היכנס לאפליקציה</a> ולחץ על 'חבר טלגרם' בהגדרות.`,
+      { parse_mode: "HTML" }
+    );
     return;
   }
 
@@ -223,15 +118,14 @@ async function handleUpgradeCommand(chatId: number) {
     return;
   }
 
-  const payload = JSON.stringify({ plan: "pro", userId: profile.id });
-
-  await sendInvoice(chatId, {
-    title: `מנוי ${PLANS.pro.name}`,
-    description: `${PLANS.pro.receiptsPerMonth} קבלות בחודש, פרויקטים ללא הגבלה`,
-    payload,
-    currency: "XTR",
-    prices: [{ label: "מנוי חודשי", amount: PLANS.pro.starPrice }],
-  });
+  await sendMessage(
+    chatId,
+    `שדרג לתוכנית <b>${PLANS.pro.name}</b> תמורת ₪${PLANS.pro.price} לחודש:\n` +
+    `\n• ${PLANS.pro.receiptsPerMonth} קבלות בחודש\n` +
+    `• פרויקטים ללא הגבלה\n\n` +
+    `<a href="${appUrl}/billing/checkout">לחץ כאן לשדרוג</a>`,
+    { parse_mode: "HTML" }
+  );
 }
 
 async function handleOptoutCommand(chatId: number) {
@@ -268,13 +162,14 @@ async function handleOptoutCommand(chatId: number) {
 }
 
 async function sendUpgradePrompt(chatId: number, usage: number, limit: number) {
+  const appUrl = process.env.TELEGRAM_APP_URL || process.env.NEXT_PUBLIC_APP_URL || "https://kabalot.online";
   await sendMessage(
     chatId,
     `⚠️ הגעת למגבלת הקבלות החודשית (${usage}/${limit}).\n\n` +
-    `שדרג לתוכנית <b>${PLANS.pro.name}</b> תמורת ${PLANS.pro.starPrice} ⭐ בלבד:\n` +
+    `שדרג לתוכנית <b>${PLANS.pro.name}</b> תמורת ₪${PLANS.pro.price} לחודש:\n` +
     `• ${PLANS.pro.receiptsPerMonth} קבלות בחודש\n` +
     `• פרויקטים ללא הגבלה\n\n` +
-    `שלח /upgrade כדי לשדרג`,
+    `<a href="${appUrl}/billing/checkout">לחץ כאן לשדרוג</a>`,
     { parse_mode: "HTML" }
   );
 }
