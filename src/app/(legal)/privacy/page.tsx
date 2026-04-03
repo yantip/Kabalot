@@ -137,7 +137,7 @@ export default function PrivacyPage() {
           <li><strong>זכות התנגדות:</strong> להתנגד לעיבוד מסוים של המידע שלך</li>
         </ul>
         <p className="text-sm leading-relaxed text-foreground/85">
-          למימוש זכויותיך, פנה אלינו בכתובת <a href="mailto:privacy@kabalot.app" className="text-primary hover:underline">privacy@kabalot.app</a>. נענה לבקשתך תוך 30 ימים.
+          למימוש זכויותיך, פנה אלינו בכתובת <a href="mailto:privacy@kabalot.online" className="text-primary hover:underline">privacy@kabalot.online</a>. נענה לבקשתך תוך 30 ימים.
         </p>
       </section>
 
@@ -182,9 +182,9 @@ export default function PrivacyPage() {
           לכל שאלה או בקשה בנוגע למדיניות פרטיות זו או לטיפול במידע שלך, ניתן לפנות אלינו:
         </p>
         <ul className="list-none space-y-1 text-sm text-foreground/85">
-          <li>דוא&quot;ל כללי: <a href="mailto:support@kabalot.app" className="text-primary hover:underline">support@kabalot.app</a></li>
-          <li>דוא&quot;ל פרטיות: <a href="mailto:privacy@kabalot.app" className="text-primary hover:underline">privacy@kabalot.app</a></li>
-          <li>דוא&quot;ל משפטי: <a href="mailto:legal@kabalot.app" className="text-primary hover:underline">legal@kabalot.app</a></li>
+          <li>דוא&quot;ל כללי: <a href="mailto:support@kabalot.online" className="text-primary hover:underline">support@kabalot.online</a></li>
+          <li>דוא&quot;ל פרטיות: <a href="mailto:privacy@kabalot.online" className="text-primary hover:underline">privacy@kabalot.online</a></li>
+          <li>דוא&quot;ל משפטי: <a href="mailto:legal@kabalot.online" className="text-primary hover:underline">legal@kabalot.online</a></li>
         </ul>
       </section>
     </article>

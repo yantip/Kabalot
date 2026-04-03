@@ -78,8 +78,8 @@ export default function RefundPage() {
           לבקשת החזר כספי, יש לפנות אלינו באחת הדרכים הבאות:
         </p>
         <ul className="list-disc list-inside space-y-2 text-sm text-foreground/85">
-          <li>שליחת דוא&quot;ל לכתובת <a href="mailto:billing@kabalot.app" className="text-primary hover:underline">billing@kabalot.app</a></li>
-          <li>שליחת דוא&quot;ל לכתובת <a href="mailto:support@kabalot.app" className="text-primary hover:underline">support@kabalot.app</a> עם הנושא &quot;בקשת החזר&quot;</li>
+          <li>שליחת דוא&quot;ל לכתובת <a href="mailto:billing@kabalot.online" className="text-primary hover:underline">billing@kabalot.online</a></li>
+          <li>שליחת דוא&quot;ל לכתובת <a href="mailto:support@kabalot.online" className="text-primary hover:underline">support@kabalot.online</a> עם הנושא &quot;בקשת החזר&quot;</li>
         </ul>
         <p className="text-sm leading-relaxed text-foreground/85">
           בבקשה כלול את הפרטים הבאים:
@@ -147,8 +147,8 @@ export default function RefundPage() {
           לכל שאלה בנוגע להחזרים וביטולים:
         </p>
         <ul className="list-none space-y-1 text-sm text-foreground/85">
-          <li>דוא&quot;ל חיוב: <a href="mailto:billing@kabalot.app" className="text-primary hover:underline">billing@kabalot.app</a></li>
-          <li>דוא&quot;ל תמיכה: <a href="mailto:support@kabalot.app" className="text-primary hover:underline">support@kabalot.app</a></li>
+          <li>דוא&quot;ל חיוב: <a href="mailto:billing@kabalot.online" className="text-primary hover:underline">billing@kabalot.online</a></li>
+          <li>דוא&quot;ל תמיכה: <a href="mailto:support@kabalot.online" className="text-primary hover:underline">support@kabalot.online</a></li>
         </ul>
         <p className="text-sm leading-relaxed text-foreground/85 mt-4">
           אנו מתחייבים לטפל בכל בקשה באופן הוגן, מהיר ושקוף.

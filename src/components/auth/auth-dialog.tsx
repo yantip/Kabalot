@@ -279,7 +279,7 @@ export function AuthDialog() {
                     id="login-email"
                     name="email"
                     type="email"
-                    placeholder="name@example.com"
+                    placeholder="name@kabalot.online"
                     dir="ltr"
                     className="h-12 rounded-xl"
                     required
@@ -363,7 +363,7 @@ export function AuthDialog() {
                     id="signup-email"
                     name="email"
                     type="email"
-                    placeholder="name@example.com"
+                    placeholder="name@kabalot.online"
                     dir="ltr"
                     className="h-12 rounded-xl"
                     required

@@ -40,8 +40,8 @@ export function Footer() {
         <div className="mt-6 pt-6 border-t border-border/30 text-center">
           <p className="text-xs text-muted-foreground/70">
             &copy; {year} קבלות. כל הזכויות שמורות. |{" "}
-            <a href="mailto:support@kabalot.app" className="hover:text-foreground transition-colors">
-              support@kabalot.app
+            <a href="mailto:support@kabalot.online" className="hover:text-foreground transition-colors">
+              support@kabalot.online
             </a>
           </p>
         </div>

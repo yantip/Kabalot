@@ -180,8 +180,8 @@ export default function TermsPage() {
           לכל שאלה בנוגע לתנאי שימוש אלה, ניתן לפנות אלינו:
         </p>
         <ul className="list-none space-y-1 text-sm text-foreground/85">
-          <li>דוא&quot;ל: <a href="mailto:support@kabalot.app" className="text-primary hover:underline">support@kabalot.app</a></li>
-          <li>דוא&quot;ל לנושאים משפטיים: <a href="mailto:legal@kabalot.app" className="text-primary hover:underline">legal@kabalot.app</a></li>
+          <li>דוא&quot;ל: <a href="mailto:support@kabalot.online" className="text-primary hover:underline">support@kabalot.online</a></li>
+          <li>דוא&quot;ל לנושאים משפטיים: <a href="mailto:legal@kabalot.online" className="text-primary hover:underline">legal@kabalot.online</a></li>
         </ul>
       </section>
     </article>
