@@ -69,9 +69,11 @@ export async function handleTelegramUpdate(update: TelegramUpdate) {
     if (token) {
       await handleStartCommand(chatId, message.from?.id ?? chatId, token);
     } else {
+      const appUrl = process.env.TELEGRAM_APP_URL || process.env.NEXT_PUBLIC_APP_URL || "https://kabalot.online";
       await sendMessage(
         chatId,
-        "ברוכים הבאים לקבלות!\n\nכדי לחבר את החשבון שלך, היכנס לאפליקציה ולחץ על 'חבר טלגרם'."
+        `ברוכים הבאים לקבלות!\n\nכדי לחבר את החשבון שלך, <a href="${appUrl}">היכנס לאפליקציה</a> ולחץ על 'חבר טלגרם' בהגדרות.`,
+        { parse_mode: "HTML" }
       );
     }
     return;
@@ -356,9 +358,11 @@ async function handlePhotoMessage(
     .single();
 
   if (!profile) {
+    const appUrl = process.env.TELEGRAM_APP_URL || process.env.NEXT_PUBLIC_APP_URL || "https://kabalot.online";
     await sendMessage(
       chatId,
-      "החשבון שלך לא מחובר. היכנס לאפליקציה ולחץ על 'חבר טלגרם' בהגדרות."
+      `החשבון שלך לא מחובר. <a href="${appUrl}">היכנס לאפליקציה</a> ולחץ על 'חבר טלגרם' בהגדרות.`,
+      { parse_mode: "HTML" }
     );
     return;
   }
