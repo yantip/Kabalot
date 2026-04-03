@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { createProject } from "@/actions/projects";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -40,8 +41,13 @@ export function CreateProjectForm() {
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-          {error}
+        <div className="flex flex-col gap-3 rounded-md bg-destructive/10 p-3 text-sm text-destructive sm:flex-row sm:items-center sm:justify-between">
+          <span>{error}</span>
+          {error.includes("הגעת למגבלת") && (
+            <Link href="/billing" className={buttonVariants({ size: "sm", variant: "destructive", className: "shrink-0 font-medium" })}>
+              שדרג למקצועי
+            </Link>
+          )}
         </div>
       )}
 
