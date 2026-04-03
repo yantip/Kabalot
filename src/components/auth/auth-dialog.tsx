@@ -152,11 +152,9 @@ export function AuthDialog() {
   if (!isOpen) return null;
 
   const signupTabSpinner =
-    submitting === "signup" ||
-    (tab === "signup" && tabSwitchTarget === "signup");
+    tab === "signup" && tabSwitchTarget === "signup";
   const loginTabSpinner =
-    submitting === "login" ||
-    (tab === "login" && tabSwitchTarget === "login");
+    tab === "login" && tabSwitchTarget === "login";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

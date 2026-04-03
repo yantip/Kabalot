@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { StatusBadge } from "@/components/receipts/status-badge";
 import { RECEIPT_STATUSES } from "@/lib/constants";
-import { Receipt as ReceiptIcon, Search } from "lucide-react";
+import { Receipt as ReceiptIcon, Search, Pencil } from "lucide-react";
 import type { Receipt } from "@/lib/supabase/types";
 import type { ReceiptStatus } from "@/lib/constants";
 
@@ -118,9 +118,7 @@ export function ReceiptTable({ receipts, enabledFields }: ReceiptTableProps) {
                 {enabledFields.includes("receipt_date") && (
                   <TableHead className="font-semibold text-foreground">תאריך</TableHead>
                 )}
-                {enabledFields.includes("currency") && (
-                  <TableHead className="font-semibold text-foreground">מטבע</TableHead>
-                )}
+
                 {enabledFields.includes("vat_amount") && (
                   <TableHead className="font-semibold text-foreground">מע&quot;מ</TableHead>
                 )}
@@ -134,7 +132,7 @@ export function ReceiptTable({ receipts, enabledFields }: ReceiptTableProps) {
                   <TableHead className="font-semibold text-foreground">הערות</TableHead>
                 )}
                 <TableHead className="font-semibold text-foreground">סטטוס</TableHead>
-                <TableHead className="w-[1%]" />
+                <TableHead className="w-10 sticky left-0 bg-muted/40" />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -160,9 +158,7 @@ export function ReceiptTable({ receipts, enabledFields }: ReceiptTableProps) {
                         : "—"}
                     </TableCell>
                   )}
-                  {enabledFields.includes("currency") && (
-                    <TableCell>{receipt.currency ?? "—"}</TableCell>
-                  )}
+
                   {enabledFields.includes("vat_amount") && (
                     <TableCell dir="ltr" className="text-end tabular-nums">
                       {receipt.vat_amount != null
@@ -184,12 +180,13 @@ export function ReceiptTable({ receipts, enabledFields }: ReceiptTableProps) {
                   <TableCell>
                     <StatusBadge status={receipt.status as ReceiptStatus} />
                   </TableCell>
-                  <TableCell className="text-end">
+                  <TableCell className="sticky left-0 bg-card w-10 text-center">
                     <Link
                       href={`/receipts/${receipt.id}`}
-                      className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "rounded-lg text-primary hover:text-primary")}
+                      className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "h-8 w-8 rounded-lg text-primary hover:text-primary")}
+                      title="ערוך"
                     >
-                      ערוך
+                      <Pencil className="h-4 w-4" />
                     </Link>
                   </TableCell>
                 </TableRow>

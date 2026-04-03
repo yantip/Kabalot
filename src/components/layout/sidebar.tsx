@@ -64,10 +64,11 @@ export function Navbar() {
             })}
           </div>
 
-          <form onSubmit={async (e) => {
+          <form onSubmit={(e) => {
             e.preventDefault();
-            await signOut();
+            // Navigate first to avoid flash of error on protected pages
             window.location.href = "/";
+            signOut();
           }}>
             <Button
               variant="ghost"
